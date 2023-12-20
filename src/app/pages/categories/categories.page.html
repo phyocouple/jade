@@ -1,0 +1,89 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="md" color="primary">
+    <ion-title>Categories</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="light">
+        <ion-icon slot="icon-only" name="bag-handle-outline"></ion-icon>
+      </ion-button>
+      <ion-button color="light">
+        <ion-icon slot="icon-only" name="chatbox-ellipses-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar mode="ios" color="primary">
+    <div class="top-search-favourite">
+      <ion-item lines="none" class="search-bar-favourite">
+        <ion-icon slot="start" name="search-outline" color="medium"></ion-icon>
+        <ion-label class="lbl">Search for favourite items</ion-label>
+      </ion-item>
+      <ion-button expand="block" fill="clear" color="light">
+        <ion-icon slot="icon-only" name="options-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="categories-screen">
+    <ion-row class="ion-no-padding">
+      <ion-col size="2" class="ion-no-padding">
+        <div scrollY="true" class="menu-content">
+          <ion-row *ngFor="let item of util.cateList;" (click)="changeCategory(item.name)" class="ion-no-padding">
+            <ion-col size="12" class="cate-info"
+              [style.border-left]="cateName == item.name ? '2px solid #FE7698' : 'none'">
+              <img [src]="cateName == item.name ? item.active : item.normal" alt="" class="cate-image">
+              <ion-label [ngClass]="cateName == item.name ? 'cate-name-active':'cate-name'">{{item.name}}</ion-label>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-col>
+      <ion-col size="10" class="ion-no-padding">
+        <ion-content>
+          <ion-row class="product-list-grid">
+            <ion-col size="6" *ngFor="let item of util.products.slice(0,20);let i = index;" (click)="onProductInfo(i)">
+              <ion-card class="product-info" mode="ios">
+                <div class="cover-image" [ngStyle]="{'background-image': 'url('+item.thumbnail+')'}">
+                  <div class="discount-banner" *ngIf="item.discountPercentage > 0">
+                    <ion-label class="lbl">{{item.discountPercentage}}%</ion-label>
+                  </div>
+                  <div class="heart-icon">
+                    <ion-icon name="heart" color="light"></ion-icon>
+                  </div>
+                </div>
+                <div class="bottom-content">
+                  <ion-label class="title">
+                    {{ (item.title.length>15)? (item.title | slice:0:15)+'..':(item.title)}}</ion-label>
+                  <div class="more-info">
+                    <ion-icon name="star" color="warning"></ion-icon>
+                    <ion-label class="lbl"> {{item.rating}} </ion-label>
+                    <ion-label class="lbl"> | </ion-label>
+                    <ion-label class="lbl"> > {{item.stock}}</ion-label>
+                  </div>
+                  <ion-label class="sold-by">Sold By : {{ (item.brand.length>10)? (item.brand |
+                    slice:0:10)+'..':(item.brand)}} </ion-label>
+                  <ion-label class="price">
+                    <span class="active" *ngIf="item.discountPercentage <= 0"> {{item.price}} </span>
+                    <span class="active"
+                      *ngIf="item.discountPercentage > 0">₹{{getDiscountedPrice(item.price,item.discountPercentage)}}</span>
+                    &nbsp;
+                    <span class="deactive" *ngIf="item.discountPercentage > 0">₹{{item.price}}</span>
+                  </ion-label>
+                  <div class="cart-btn">
+                    <ion-icon name="bag-add-outline" color="light"></ion-icon>
+                  </div>
+                </div>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-content>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

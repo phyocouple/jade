@@ -1,0 +1,269 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="md" color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()" color="light">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="light">
+        <ion-icon slot="icon-only" name="bag-handle-outline"></ion-icon>
+      </ion-button>
+      <ion-button color="light">
+        <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="product-info-screen">
+    <swiper-container #swiper slides-per-view="1" (slidechange)="slideChanged($event)" speed="400">
+      <swiper-slide *ngFor="let item of images">
+        <div class="top-images">
+          <img [src]="item" alt="" class="img">
+          <ion-label class="lbl">{{index+1}} / {{images.length}}</ion-label>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+
+    <ion-row class="product-info">
+      <ion-col size="10">
+        <div class="price-tag">
+          <ion-label class="price">
+            <span class="active" *ngIf="discountPercentage <= 0"> {{price}} </span>
+            <span class="active" *ngIf="discountPercentage > 0">₹{{discount}}</span>
+            &nbsp;
+            <span class="deactive" *ngIf="discountPercentage > 0">₹{{price}}</span>
+          </ion-label>
+          <ion-label class="stock"> <ion-icon name="chevron-back-outline" color="medium"></ion-icon> {{stock}}
+            Sold </ion-label>
+        </div>
+        <ion-label class="title">
+          {{ (title.length>20)? (title | slice:0:20)+'..':(title)}}
+        </ion-label>
+        <div class="rate-item">
+          <ion-icon name="star" color="warning" class="star-icon"></ion-icon>
+          <ion-icon name="star" color="warning" class="star-icon"></ion-icon>
+          <ion-icon name="star" color="warning" class="star-icon"></ion-icon>
+          <ion-icon name="star" color="warning" class="star-icon"></ion-icon>
+          <ion-icon name="star" color="warning" class="star-icon"></ion-icon>
+          <ion-label class="lbl">5</ion-label>
+          <ion-label class="lbl-total">(48)</ion-label>
+        </div>
+        <ion-label class="cashback">Cashback 10%</ion-label>
+      </ion-col>
+      <ion-col size="2">
+        <div class="heart">
+          <ion-icon name="heart" color="light"></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="seller-info">
+      <ion-col size="2">
+        <img [src]="cover" alt="" class="img">
+      </ion-col>
+      <ion-col size="10">
+        <div class="seller-name">
+          <ion-label class="title">{{brand}} Inc.</ion-label>
+          <ion-label class="sub-title">California, USA</ion-label>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <div class="stats-info">
+      <div class="name-content">
+        <ion-label class="title">120</ion-label>
+        <ion-label class="sub-title">Products</ion-label>
+      </div>
+      <div class="line"></div>
+      <div class="name-content">
+        <ion-label class="title"> <ion-icon slot="start" name="star" color="warning"></ion-icon> 4.9 </ion-label>
+        <ion-label class="sub-title">Reviews</ion-label>
+      </div>
+      <div class="line"></div>
+      <div class="name-content">
+        <ion-label class="title"> 100% </ion-label>
+        <ion-label class="sub-title">Response</ion-label>
+      </div>
+    </div>
+
+    <ion-row class="btn-bottom">
+      <ion-col size="6">
+        <ion-button expand="block" fill="outline" color="medium" size="small">
+          <ion-icon slot="start" name="chatbubble-ellipses-outline"></ion-icon>
+          Chat
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" fill="solid" color="primary" size="small">
+          <ion-icon slot="start" name="add-outline"></ion-icon>
+          Follow
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <div class="product-info-other">
+      <ion-label class="main-title">Product Details</ion-label>
+      <ion-label class="desc">
+        Name : Roadster Gaming Bluetooth True Wireless in-Ear Earbuds with Mic, 15 Hours Total Playtime with Case, RGB
+        Headphones Headset, Type C Charging, Deep Bass, BT 5.1 IPX4 Waterproof,Compatible with MI Samsung Realme Vivo
+        OPPO Oneplus (Sound Engine- Yellow)
+
+        Battery Charge Time : 1 Hour
+
+        Bluetooth Range : 10m
+
+        Bluetooth Version : 5.1
+
+        Charging Type : Type C
+
+        Color : Yellow
+
+        Compatibility : All Smartphones
+
+        Frequency : 90 Hz
+
+        Material : ABS Plastic
+
+        Mic : Yes
+
+        Model Name : Game Headphone TWS - Roadster Sound Engine
+
+        Net Quantity (N) : 1
+
+        Noise Cancelling : No
+
+        Play Time : 15 Hours
+
+        Type : TWS
+
+        Warranty Period : 1 Month
+
+        Warranty Type : Carry In
+
+        Water Resistant : Yes
+
+        [Unique Racing-Car Design]
+
+        [Cool RGB Light]
+
+        [13mm True Bass Drivers]
+
+        [Low Lentency]
+
+        [BUILT-IN MIC]
+
+        [Type C Charging]
+
+        [IPX4 Sweat &Water Resistance]
+
+        [Touch Control]
+
+        [Super Large 300mAh Battery Capacity]
+
+        [Skin Friendly Silicon Eartips]
+
+        Country of Origin : India
+      </ion-label>
+
+      <ion-label class="main-title">Rating & Reviews</ion-label>
+
+      <ion-row class="review-info">
+        <ion-col size="5" style="border-right: 2px solid lightgray;">
+          <div class="content">
+            <ion-label class="title">4.9</ion-label>
+            <div class="star-list">
+              <ion-icon slot="start" name="star" color="warning"></ion-icon>
+              <ion-icon slot="start" name="star" color="warning"></ion-icon>
+              <ion-icon slot="start" name="star" color="warning"></ion-icon>
+              <ion-icon slot="start" name="star" color="warning"></ion-icon>
+              <ion-icon slot="start" name="star-half" color="warning"></ion-icon>
+            </div>
+            <ion-label class="sub-title">6.8k reviews</ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="7">
+          <div class="review-stats">
+            <div class="lbl-content">
+              <ion-label class="lbl">5</ion-label>
+              <div class="line"> <span class="active" [style.width.%]="80"></span> </div>
+            </div>
+            <div class="lbl-content">
+              <ion-label class="lbl">4</ion-label>
+              <div class="line"> <span class="active" [style.width.%]="60"></span> </div>
+            </div>
+            <div class="lbl-content">
+              <ion-label class="lbl">3</ion-label>
+              <div class="line"> <span class="active" [style.width.%]="40"></span> </div>
+            </div>
+            <div class="lbl-content">
+              <ion-label class="lbl">2</ion-label>
+              <div class="line"> <span class="active" [style.width.%]="20"></span> </div>
+            </div>
+            <div class="lbl-content">
+              <ion-label class="lbl">1</ion-label>
+              <div class="line"> <span class="active" [style.width.%]="10"></span> </div>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <div class="spacer"></div>
+
+      <div class="list-item" *ngFor="let item of util.userList.slice(0,3);let i = index;">
+        <div class="top-content">
+          <div class="front">
+            <div [ngStyle]="{'background-image': 'url('+item.image+')'}" class="cover"></div>
+            <ion-label class="name">{{item.name}}</ion-label>
+          </div>
+          <div class="end">
+            <ion-label class="rate"> <ion-icon slot="start" name="star" color="primary"></ion-icon> 5 </ion-label>
+            <ion-icon slot="icon-only" name="ellipsis-horizontal-circle-outline" color="medium"
+              class="more-icon"></ion-icon>
+          </div>
+        </div>
+        <ion-label class="desc">Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry.</ion-label>
+        <div class="bottom-data">
+          <div class="icon-date">
+            <ion-icon slot="start" name="heart" color="danger"></ion-icon>
+            <ion-label class="name">856</ion-label>
+          </div>
+          <div class="space"></div>
+          <div class="icon-date">
+            <ion-label class="name">2 months ago</ion-label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button expand="block" fill="outline" color="medium" (click)="openVariations()">
+          <ion-icon slot="start" name="bag-handle-outline"></ion-icon>
+          Add to Cart
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" fill="solid" color="primary" (click)="openVariations()">
+          <ion-icon slot="start" name="cart-outline"></ion-icon>
+          Buy Now
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

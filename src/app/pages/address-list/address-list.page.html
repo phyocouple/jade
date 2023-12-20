@@ -1,0 +1,58 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios" color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()" color="light">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Select Address</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="select-option-screen">
+    <ion-label class="main-title">Select Address</ion-label>
+    <ion-radio-group name="auto" value="1">
+      <ion-card class="card-content" mode="ios">
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">
+            <p class="title">Home</p>
+            <p class="sub-title">John Cannery (+91 936 852 7410)</p>
+            <p class="address">1195 Eagle Street Hazelwood, IL 63042</p>
+          </ion-label>
+          <ion-radio value="1" mode="md" slot="start"></ion-radio>
+        </ion-item>
+      </ion-card>
+
+      <ion-card class="card-content" mode="ios">
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">
+            <p class="title">Office</p>
+            <p class="sub-title">Rose D. Malloy (+91 874 852 7410)</p>
+            <p class="address">467 Charles Street Detroit, MI 48226</p>
+          </ion-label>
+          <ion-radio value="2" mode="md" slot="start"></ion-radio>
+        </ion-item>
+      </ion-card>
+
+      <ion-card class="card-content" mode="ios">
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">
+            <p class="title">Home - 2</p>
+            <p class="sub-title">Robert J. Grayson (+91 987 852 7410)</p>
+            <p class="address">779 Diamond Cove Providence, RI 02904</p>
+          </ion-label>
+          <ion-radio value="3" mode="md" slot="start"></ion-radio>
+        </ion-item>
+      </ion-card>
+
+    </ion-radio-group>
+  </div>
+</ion-content>

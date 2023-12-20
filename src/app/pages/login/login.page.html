@@ -1,0 +1,61 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Sign In</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="login-screen">
+    <div class="logo-content">
+      <img src="assets/images/images/auth.png" alt="" class="img">
+    </div>
+    <ion-label class="lbl">Email/Phone Number</ion-label>
+    <ion-item lines="none" class="input-content">
+      <ion-input type="text" [(ngModel)]="userEmailOrPhone" placeholder="Enter email or phone number"></ion-input>
+    </ion-item>
+    <ion-label class="lbl">Password</ion-label>
+    <ion-item lines="none" class="input-content">
+      <ion-input [type]="passwordView ? 'text' : 'password'" [(ngModel)]="userPassword" placeholder="Enter password"></ion-input>
+      <ion-icon slot="end" [name]="passwordView ? 'eye-off-outline' : 'eye-outline'" (click)="togglePasswordVisibility()" color="medium"></ion-icon>
+    </ion-item>
+
+    <div class="signin-options">
+      <ion-item class="sign-check" lines="none">
+        <ion-label class="lbl">Keep me signed in</ion-label>
+        <ion-checkbox slot="start" mode="md" [(ngModel)]="keepMeSignedIn"></ion-checkbox>
+      </ion-item>
+      <ion-label class="reset-btn" (click)="onResetPassword()">Forgot password?</ion-label>
+    </div>
+
+    <ion-button expand="block" fill="solid" color="primary" (click)="loginUser()">
+      Sign In
+    </ion-button>
+
+    <ion-row class="or-content">
+      <ion-col size="5">
+        <div class="break"></div>
+      </ion-col>
+      <ion-col size="2">
+        <ion-label class="lbl">or</ion-label>
+      </ion-col>
+      <ion-col size="5">
+        <div class="break"></div>
+      </ion-col>
+    </ion-row>
+
+    <ion-button expand="block" fill="outline" color="dark" (click)="socialAccount()">
+      Using social media accounts
+    </ion-button>
+
+    <ion-button expand="block" fill="clear" color="dark" class="register-btn" (click)="onRegister()">
+      Don't Have an account ? &nbsp; <span class="active">Sign Up</span>
+    </ion-button>
+  </div>
+</ion-content>

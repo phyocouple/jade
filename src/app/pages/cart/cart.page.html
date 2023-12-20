@@ -1,0 +1,78 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="md" color="primary">
+    <ion-title>Cart</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="light">
+        <ion-icon slot="icon-only" name="chatbox-ellipses-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="cart-screen">
+    <ion-card mode="ios" class="cart-item" *ngFor="let item of util.products.slice(0,8);let i = index;">
+      <div class="cart-header">
+        <ion-icon name="storefront-outline" color="secondary"></ion-icon>
+        <ion-label class="brand">{{item.brand}}</ion-label>
+      </div>
+      <div class="cart-content">
+        <ion-row>
+          <ion-col size="3">
+            <div class="cover-image" [ngStyle]="{'background-image': 'url('+item.thumbnail+')'}"></div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="name-content">
+              <ion-label class="title">
+                {{ (item.title.length>20)? (item.title | slice:0:20)+'..':(item.title)}}
+              </ion-label>
+              <div class="variations" (click)="openVariations(i)">
+                <ion-label class="lbl">Variations : Yellow, L</ion-label>
+                <ion-icon name="chevron-down-outline" color="light"></ion-icon>
+              </div>
+              <div class="quantity">
+                <ion-icon name="remove-outline" color="medium"></ion-icon>
+                <ion-label class="lbl"> {{i+1}} </ion-label>
+                <ion-icon name="add-outline" color="medium"></ion-icon>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="3" style="position: relative;">
+            <ion-label class="price">
+              <span class="active" *ngIf="item.discountPercentage <= 0"> {{item.price}} </span>
+              <span class="active"
+                *ngIf="item.discountPercentage > 0">₹{{getDiscountedPrice(item.price,item.discountPercentage)}}</span>
+              &nbsp;
+              <span class="deactive" *ngIf="item.discountPercentage > 0">₹{{item.price}}</span>
+            </ion-label>
+            <ion-icon name="trash-bin-outline" class="delte-btn" color="danger"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-card>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar color="tertiary">
+    <ion-row>
+      <ion-col size="8">
+        <div class="cart-price-lbl">
+          <ion-label class="lbl">Total (8 Products) : </ion-label>
+          <ion-label class="price">₹15,797.00</ion-label>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button expand="block" fill="solid" color="primary" size="small" (click)="onCheckout()">
+          Buy Now
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,121 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()" color="dark">
+        <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="variations-modal-screen">
+    <ion-row class="product-info">
+      <ion-col size="3">
+        <div class="cover-image" [ngStyle]="{'background-image': 'url('+cover+')'}"></div>
+      </ion-col>
+      <ion-col size="9">
+        <div class="name-content">
+          <ion-label class="title">
+            {{ (title.length>20)? (title | slice:0:20)+'..':(title)}}
+          </ion-label>
+          <div class="price-tag">
+            <ion-label class="price">
+              <span class="active" *ngIf="discountPercentage <= 0"> {{price}} </span>
+              <span class="active" *ngIf="discountPercentage > 0">₹{{discount}}</span>
+              &nbsp;
+              <span class="deactive" *ngIf="discountPercentage > 0">₹{{price}}</span>
+            </ion-label>
+            <ion-label class="stock"> <ion-icon name="chevron-back-outline" color="medium"></ion-icon> {{stock}}
+              Available </ion-label>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-label class="main-title">Color : </ion-label>
+    <ion-row class="colors-row">
+      <ion-col size="4" (click)="changeColor('red')">
+        <div class="color-content">
+          <div class="color" [style.background-color]="'red'"
+            [style.border]="selectedColor == 'red' ? '1px solid black' : 'none'"></div>
+          <ion-label class="lbl">Red</ion-label>
+        </div>
+      </ion-col>
+      <ion-col size="4" (click)="changeColor('yellow')">
+        <div class="color-content">
+          <div class="color" [style.background-color]="'yellow'"
+            [style.border]="selectedColor == 'yellow' ? '1px solid black' : 'none'"></div>
+          <ion-label class="lbl">Yellow</ion-label>
+        </div>
+      </ion-col>
+      <ion-col size="4" (click)="changeColor('pink')">
+        <div class="color-content">
+          <div class="color" [style.background-color]="'pink'"
+            [style.border]="selectedColor == 'pink' ? '1px solid black' : 'none'"></div>
+          <ion-label class="lbl">Pink Rose</ion-label>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-label class="main-title">Size : </ion-label>
+    <ion-row class="size-row">
+      <ion-col size="2" (click)="changeSize('s')">
+        <div [ngClass]="selectedSize == 's' ? 'size-box-active':'size-box'">
+          <ion-label class="lbl">s</ion-label>
+        </div>
+      </ion-col>
+      <ion-col size="2" (click)="changeSize('m')">
+        <div [ngClass]="selectedSize == 'm' ? 'size-box-active':'size-box'">
+          <ion-label class="lbl">m</ion-label>
+        </div>
+      </ion-col>
+      <ion-col size="2" (click)="changeSize('l')">
+        <div [ngClass]="selectedSize == 'l' ? 'size-box-active':'size-box'">
+          <ion-label class="lbl">l</ion-label>
+        </div>
+      </ion-col>
+      <ion-col size="2" (click)="changeSize('xl')">
+        <div [ngClass]="selectedSize == 'xl' ? 'size-box-active':'size-box'">
+          <ion-label class="lbl">xl</ion-label>
+        </div>
+      </ion-col>
+      <ion-col size="2" (click)="changeSize('xxl')">
+        <div [ngClass]="selectedSize == 'xxl' ? 'size-box-active':'size-box'">
+          <ion-label class="lbl">xxl</ion-label>
+        </div>
+      </ion-col>
+      <ion-col size="2" (click)="changeSize('xxxl')">
+        <div [ngClass]="selectedSize == 'xxxl' ? 'size-box-active':'size-box'">
+          <ion-label class="lbl">xxxl</ion-label>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-btn">
+      <ion-col size="8">
+        <ion-label class="qty-lbl">Quantity</ion-label>
+      </ion-col>
+      <ion-col size="4">
+        <div class="quantity">
+          <ion-icon name="remove-outline" color="medium"></ion-icon>
+          <ion-label class="lbl"> 1 </ion-label>
+          <ion-icon name="add-outline" color="medium"></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button (click)="close()" expand="block" fill="solid" color="primary">
+      Confirm
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

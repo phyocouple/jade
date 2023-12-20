@@ -1,0 +1,46 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="md" color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()" color="light">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Submit Review</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="submit-review-screen">
+    <div class="top-content">
+      <img src="assets/images/avatar/2.jpg" alt="" class="img">
+      <ion-label class="name">John Cannery</ion-label>
+      <ion-label class="name">How would you rate quality of this Products</ion-label>
+
+      <div class="rate-list">
+        <ion-icon [name]="rate >= 1 ? 'star':'star-outline'" [color]="rate >= 1 ? 'warning':'dark'"
+          (click)="changeRate(1)"></ion-icon>
+        <ion-icon [name]="rate >= 2 ? 'star':'star-outline'" [color]="rate >= 2 ? 'warning':'dark'"
+          (click)="changeRate(2)"></ion-icon>
+        <ion-icon [name]="rate >= 3 ? 'star':'star-outline'" [color]="rate >= 3 ? 'warning':'dark'"
+          (click)="changeRate(3)"></ion-icon>
+        <ion-icon [name]="rate >= 4 ? 'star':'star-outline'" [color]="rate >= 4 ? 'warning':'dark'"
+          (click)="changeRate(4)"></ion-icon>
+        <ion-icon [name]="rate >= 5 ? 'star':'star-outline'" [color]="rate >= 5 ? 'warning':'dark'"
+          (click)="changeRate(5)"></ion-icon>
+      </div>
+    </div>
+    <ion-label class="main-title">Leave a Your <br> Valuable Comments</ion-label>
+    <ion-textarea rows="10"></ion-textarea>
+
+    <ion-button expand="block" fill="solid" color="primary">
+      SUBMIT
+    </ion-button>
+  </div>
+</ion-content>

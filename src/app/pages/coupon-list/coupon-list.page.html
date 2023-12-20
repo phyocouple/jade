@@ -1,0 +1,44 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title>Coupons</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()" color="light">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar mode="ios">
+    <ion-searchbar placeholder="Enter Coupon Code" inputmode="text" type="text" mode="ios"
+      style="padding: 0px;"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="coupon-list-screen">
+    <ion-card mode="ios" class="coupon-data" *ngFor="let item of [1,2,3,4,5,6,7,8,9,10]">
+      <img src="assets/images/images/discount.png" alt="" class="img">
+      <ion-label class="title">Find ₹35 Off on Purchase of Cadcury Silk products worth ₹360 or More.</ion-label>
+      <ion-label class="sub-title">Valid Once per customer <span class="bold">View Details</span> </ion-label>
+      <ion-row>
+        <ion-col size="4">
+          <div class="dashed-btn" (click)="onBack()">
+            <ion-label class="lbl">SILK35</ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="4"></ion-col>
+        <ion-col size="4">
+          <div class="active-btn" (click)="onBack()">
+            <ion-label class="lbl">APPLY</ion-label>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </div>
+</ion-content>

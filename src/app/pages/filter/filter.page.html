@@ -1,0 +1,228 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="md" color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="close()" color="light">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Filter</ion-title>
+  </ion-toolbar>
+  <ion-toolbar class="filter-toolbar">
+    <ion-row class="filter-tool-bar-btns">
+      <ion-col size="6">
+        <div class="btn" [style.border]="selected == 'refined' ? '2px solid #FE7698' : 'none'"
+          (click)="changeFilter('refined')">
+          <ion-label class="lbl">Refined By</ion-label>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="btn" [style.border]="selected == 'sort' ? '2px solid #FE7698' : 'none'"
+          (click)="changeFilter('sort')">
+          <ion-label class="lbl">Sort By</ion-label>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="filter-screen">
+    <div *ngIf="selected =='refined'">
+      <ion-radio-group name="auto" value="tesla">
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">Popularity</ion-label>
+          <ion-radio value="tesla" mode="md" color="primary" slot="end"></ion-radio>
+        </ion-item>
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">Price - Low to High</ion-label>
+          <ion-radio value="lh" mode="md" color="primary" slot="end"></ion-radio>
+        </ion-item>
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">Price - High to Low</ion-label>
+          <ion-radio value="hl" mode="md" color="primary" slot="end"></ion-radio>
+        </ion-item>
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">Alphabetical</ion-label>
+          <ion-radio value="alpha" mode="md" color="primary" slot="end"></ion-radio>
+        </ion-item>
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">Off - High to Low</ion-label>
+          <ion-radio value="off" mode="md" color="primary" slot="end"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </div>
+
+    <div *ngIf="selected == 'sort'">
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-label>Brand</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-radio-group name="auto" value="tesla">
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Popularity</ion-label>
+                <ion-radio value="tesla" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Price - Low to High</ion-label>
+                <ion-radio value="lh" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Price - High to Low</ion-label>
+                <ion-radio value="hl" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Alphabetical</ion-label>
+                <ion-radio value="alpha" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Off - High to Low</ion-label>
+                <ion-radio value="off" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </div>
+        </ion-accordion>
+        <ion-accordion value="second">
+          <ion-item slot="header" color="light">
+            <ion-label>Price (7)</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-radio-group name="auto" value="tesla">
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Popularity</ion-label>
+                <ion-radio value="tesla" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Price - Low to High</ion-label>
+                <ion-radio value="lh" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Price - High to Low</ion-label>
+                <ion-radio value="hl" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Alphabetical</ion-label>
+                <ion-radio value="alpha" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Off - High to Low</ion-label>
+                <ion-radio value="off" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </div>
+        </ion-accordion>
+        <ion-accordion value="third">
+          <ion-item slot="header" color="light">
+            <ion-label>Discount (2)</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-radio-group name="auto" value="tesla">
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Popularity</ion-label>
+                <ion-radio value="tesla" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Price - Low to High</ion-label>
+                <ion-radio value="lh" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Price - High to Low</ion-label>
+                <ion-radio value="hl" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Alphabetical</ion-label>
+                <ion-radio value="alpha" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Off - High to Low</ion-label>
+                <ion-radio value="off" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </div>
+        </ion-accordion>
+        <ion-accordion value="fourth">
+          <ion-item slot="header" color="light">
+            <ion-label>Pack Size (3)</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-radio-group name="auto" value="tesla">
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Popularity</ion-label>
+                <ion-radio value="tesla" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Price - Low to High</ion-label>
+                <ion-radio value="lh" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Price - High to Low</ion-label>
+                <ion-radio value="hl" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Alphabetical</ion-label>
+                <ion-radio value="alpha" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Off - High to Low</ion-label>
+                <ion-radio value="off" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </div>
+        </ion-accordion>
+        <ion-accordion value="fifth">
+          <ion-item slot="header" color="light">
+            <ion-label>Preferrences</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-radio-group name="auto" value="tesla">
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Popularity</ion-label>
+                <ion-radio value="tesla" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Price - Low to High</ion-label>
+                <ion-radio value="lh" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Price - High to Low</ion-label>
+                <ion-radio value="hl" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Alphabetical</ion-label>
+                <ion-radio value="alpha" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+              <ion-item lines="none" class="item-content">
+                <ion-label class="lbl">Off - High to Low</ion-label>
+                <ion-radio value="off" mode="md" color="primary" slot="end"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+    </div>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button (click)="close()" expand="block" fill="outline" color="medium">
+          CANCLE ALL
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button (click)="close()" expand="block" fill="solid" color="primary">
+          APPLY
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

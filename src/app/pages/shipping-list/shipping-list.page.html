@@ -1,0 +1,68 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios" color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()" color="light">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Select Shipping</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="select-option-screen">
+    <ion-label class="main-title">Select Shipping</ion-label>
+    <ion-radio-group name="auto" value="1">
+      <ion-card class="card-content" mode="ios">
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">
+            <p class="title">Courier Name 1 (Free)</p>
+            <p class="sub-title">Shipped 7 - 8 days</p>
+            <p class="address">Available for COD</p>
+          </ion-label>
+          <ion-radio value="1" mode="md" slot="start"></ion-radio>
+        </ion-item>
+      </ion-card>
+
+      <ion-card class="card-content" mode="ios">
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">
+            <p class="title">Courier Name 2 (₹22.22)</p>
+            <p class="sub-title">Shipped 7 - 8 days)</p>
+            <p class="address">Available for COD</p>
+          </ion-label>
+          <ion-radio value="2" mode="md" slot="start"></ion-radio>
+        </ion-item>
+      </ion-card>
+
+      <ion-card class="card-content" mode="ios">
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">
+            <p class="title">Courier Name 3 (₹22.22)</p>
+            <p class="sub-title">Shipped 7 - 8 days</p>
+            <p class="address">Available for COD</p>
+          </ion-label>
+          <ion-radio value="3" mode="md" slot="start"></ion-radio>
+        </ion-item>
+      </ion-card>
+
+      <ion-card class="card-content" mode="ios">
+        <ion-item lines="none" class="item-content">
+          <ion-label class="lbl">
+            <p class="title">Courier Name 4 (₹22.22)</p>
+            <p class="sub-title">Shipped 7 - 8 days</p>
+            <p class="address">Available for COD</p>
+          </ion-label>
+          <ion-radio value="4" mode="md" slot="start"></ion-radio>
+        </ion-item>
+      </ion-card>
+    </ion-radio-group>
+  </div>
+</ion-content>

@@ -1,0 +1,96 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="md" color="primary">
+    <ion-title>DilMart</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="light">
+        <ion-icon slot="icon-only" name="bag-handle-outline"></ion-icon>
+      </ion-button>
+      <ion-button color="light" (click)="onChat()">
+        <ion-icon slot="icon-only" name="chatbox-ellipses-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar mode="ios" color="primary">
+    <ion-item lines="none" class="search-bar-home-header" (click)="onSearch()">
+      <ion-icon slot="start" name="search-outline" color="medium"></ion-icon>
+      <ion-label class="lbl">Search for favourite items</ion-label>
+    </ion-item>
+  </ion-toolbar>
+  <ion-toolbar mode="md" color="primary">
+    <ion-segment [(ngModel)]="cateName" mode="md" (ionChange)="segmentChanged($event)" [scrollable]="true">
+      <ion-segment-button [value]="item.name" *ngFor="let item of util.cateList;">
+        <ion-label>{{item.name}}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="home-screen">
+    <div class="main-title">
+      <ion-label class="lbl">Hot Offer</ion-label>
+      <ion-label class="btn" (click)="onOffers()">View All</ion-label>
+    </div>
+    <swiper-container slides-per-view="1.2" centered-slides="true" space-between="10" speed="400" initial-slide="1">
+      <swiper-slide *ngFor="let item of util.banners" (click)="byCategory('Offers')">
+        <div class="banner-covers" [ngStyle]="{'background-image': 'url('+item+')'}"></div>
+      </swiper-slide>
+    </swiper-container>
+    <div class="main-title">
+      <ion-label class="lbl">Prefered Brand</ion-label>
+      <ion-label class="btn" (click)="onBrands()">View All</ion-label>
+    </div>
+    <ion-row class="brands-list">
+      <ion-col size="4" *ngFor="let item of util.brands.slice(0,6);" (click)="byCategory(item.Brand)">
+        <div class="cover-image" [ngStyle]="{'background-image': 'url('+item.image+')'}"></div>
+      </ion-col>
+    </ion-row>
+    <div class="main-title">
+      <ion-label class="lbl">Hot Deals</ion-label>
+      <ion-label class="btn" (click)="byCategory('Hot Deals')">View All</ion-label>
+    </div>
+    <ion-row class="product-list-grid">
+      <ion-col size="6" *ngFor="let item of util.products.slice(0,12);let i = index;" (click)="onProductInfo(i)">
+        <ion-card class="product-info" mode="ios">
+          <div class="cover-image" [ngStyle]="{'background-image': 'url('+item.thumbnail+')'}">
+            <div class="discount-banner" *ngIf="item.discountPercentage > 0">
+              <ion-label class="lbl">{{item.discountPercentage}}%</ion-label>
+            </div>
+            <div class="heart-icon">
+              <ion-icon name="heart" color="light"></ion-icon>
+            </div>
+          </div>
+          <div class="bottom-content">
+            <ion-label class="title">
+              {{ (item.title.length>20)? (item.title | slice:0:20)+'..':(item.title)}}</ion-label>
+            <div class="more-info">
+              <ion-icon name="star" color="warning"></ion-icon>
+              <ion-label class="lbl"> {{item.rating}} </ion-label>
+              <ion-label class="lbl"> | </ion-label>
+              <ion-label class="lbl"> > {{item.stock}}</ion-label>
+            </div>
+            <ion-label class="sold-by">Sold By : {{ (item.brand.length>14)? (item.brand |
+              slice:0:14)+'..':(item.brand)}} </ion-label>
+            <ion-label class="price">
+              <span class="active" *ngIf="item.discountPercentage <= 0"> {{item.price}} </span>
+              <span class="active"
+                *ngIf="item.discountPercentage > 0">₹{{getDiscountedPrice(item.price,item.discountPercentage)}}</span>
+              &nbsp;
+              <span class="deactive" *ngIf="item.discountPercentage > 0">₹{{item.price}}</span>
+            </ion-label>
+            <div class="cart-btn">
+              <ion-icon name="bag-add-outline" color="light"></ion-icon>
+            </div>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

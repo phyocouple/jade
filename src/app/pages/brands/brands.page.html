@@ -1,0 +1,28 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios" color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()" color="light">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Shop By Brands</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="home-screen">
+    <ion-row class="brands-list">
+      <ion-col size="4" *ngFor="let item of util.brands;" (click)="byCategory(item.Brand)">
+        <div class="cover-image" [ngStyle]="{'background-image': 'url('+item.image+')'}"></div>
+      </ion-col>
+    </ion-row>
+
+  </div>
+</ion-content>

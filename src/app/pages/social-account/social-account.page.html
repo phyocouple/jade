@@ -1,0 +1,36 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios">
+    <ion-title>Select Account</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close('close')" color="dark">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="social-account">
+    <ion-button (click)="close('ok')" expand="block" fill="outline" color="dark" class="btn">
+      <ion-icon slot="start" name="logo-apple" color="dark"></ion-icon>
+      Continue with Apple ID
+    </ion-button>
+
+    <ion-button (click)="close('ok')" expand="block" fill="outline" color="dark" class="btn">
+      <ion-icon slot="start" name="logo-facebook" color="tertiary"></ion-icon>
+      Continue with Facebook
+    </ion-button>
+
+    <ion-button (click)="close('ok')" expand="block" fill="outline" color="dark" class="btn">
+      <ion-icon slot="start" name="logo-google" color="danger"></ion-icon>
+      Continue with Google
+    </ion-button>
+  </div>
+</ion-content>

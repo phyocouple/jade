@@ -1,0 +1,57 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="welcome-screen">
+    <swiper-container #swiper slides-per-view="1" (slidechange)="slideChanged($event)" speed="400">
+      <swiper-slide>
+        <div class="slider-content">
+          <div class="cover" [ngStyle]="{'background-image': 'url(assets/images/sliders/1.png)'}"></div>
+          <ion-label class="title">Choose your favourite clothing style.</ion-label>
+          <ion-label class="sub-title">Welcome to DilMart, your one-stop-shop for all things fashion. We offer a wide
+            range of clothing options for both men and women, from casual wear to formal attire</ion-label>
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="slider-content">
+          <div class="cover" [ngStyle]="{'background-image': 'url(assets/images/sliders/2.png)'}"></div>
+          <ion-label class="title">Choose clothing size.</ion-label>
+          <ion-label class="sub-title">Whether you're looking to update your everyday wardrobe or searching for that
+            perfect outfit for a special occasion, we have you covered</ion-label>
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="slider-content">
+          <div class="cover" [ngStyle]="{'background-image': 'url(assets/images/sliders/3.png)'}"></div>
+          <ion-label class="title">Pay for your items via mobile.</ion-label>
+          <ion-label class="sub-title">Our app is designed to make shopping for clothing easy and convenient. Browse
+            through our collection and filter your search by size, color, and price to find exactly what you're looking
+            for.</ion-label>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+
+    <div class="btm-navigation">
+      <div class="progress" *ngIf="isEnd == false;">
+        <div *ngFor="let item of [0,1,2]" [class]="item == index ?'active':'deactive'"></div>
+      </div>
+      <div class="nav-btn" (click)="nextSlide()" *ngIf="isEnd == false;">
+        <ion-icon name="arrow-forward-outline" color="light"></ion-icon>
+      </div>
+      <div class="full-btn" *ngIf="isEnd == true" (click)="onLogin()">
+        <ion-label class="lbl">Get Started</ion-label>
+      </div>
+    </div>
+  </div>
+</ion-content>

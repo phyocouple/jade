@@ -1,0 +1,13 @@
+{
+  "name": "shop-1",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "http://localhost:8069"
+    }
+  ]
+}

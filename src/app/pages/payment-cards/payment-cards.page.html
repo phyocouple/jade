@@ -1,0 +1,82 @@
+<!--
+  Authors : initappz (Rahul Jograna)
+  Website : https://initappz.com/
+  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
+  terms found in the Website https://initappz.com/license
+  Copyright and Good Faith Purchasers © 2023-present initappz.
+-->
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary" mode="md">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()" color="light">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Select Payment Method</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="payment_screen">
+    <div class="header">
+      <ion-label class="title-head">Added card</ion-label>
+      <ion-button (click)="addNewCard()" fill="clear" expand="block">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </div>
+    <swiper-container slides-per-view="1.2" centered-slides="true" space-between="10" speed="400" initial-slide="1">
+      <swiper-slide *ngFor="let item of cardsList">
+        <div class="card-ui" [ngStyle]="{'background-color': item.color}">
+          <div class="image-container">
+            <img src="assets/images/images/chip.png" alt="" class="img">
+            <img src="assets/images/images/visa.png" alt="" class="img">
+          </div>
+          <ion-label class="number">{{item.number}}</ion-label>
+          <div class="name-container">
+            <ion-label class="name">{{item.name}}</ion-label>
+            <ion-label class="name">{{item.exp}}</ion-label>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+
+    <div class="breaker"></div>
+
+    <div class="header">
+      <ion-label class="title-head">UPI</ion-label>
+    </div>
+    <ion-radio-group name="auto" value="tesla">
+      <ion-item lines="none" class="item-content">
+        <ion-icon slot="start" name="logo-google" color="danger"></ion-icon>
+        <ion-label>GPay</ion-label>
+        <ion-radio slot="end" mode="md"></ion-radio>
+      </ion-item>
+
+      <ion-item lines="none" class="item-content">
+        <ion-icon slot="start" name="logo-amazon" color="warning"></ion-icon>
+        <ion-label>Amazon Pay</ion-label>
+        <ion-radio slot="end" mode="md"></ion-radio>
+      </ion-item>
+
+      <ion-item lines="none" class="item-content">
+        <ion-icon slot="start" name="logo-pinterest" color="secondary"></ion-icon>
+        <ion-label>PhonePay</ion-label>
+        <ion-radio slot="end" mode="md"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+
+
+    <div class="breaker"></div>
+
+    <div class="header">
+      <ion-label class="title-head">Cash on Delivery</ion-label>
+    </div>
+
+    <ion-item lines="none" class="item-content">
+      <ion-icon slot="start" name="card-outline" color="primary"></ion-icon>
+      <ion-label>Cash on Delivery</ion-label>
+      <ion-radio slot="end" mode="md"></ion-radio>
+    </ion-item>
+
+    <div class="breaker"></div>
+  </div>
+</ion-content>
