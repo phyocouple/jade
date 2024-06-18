@@ -32,13 +32,13 @@ export class VariationsModalPage implements OnInit {
     console.log(this.navParam.get('index'));
     const info = this.util.products[this.navParam.get('index')];
     console.log(info);
-    if (info && info.title) {
-      this.title = info.title;
-      this.cover = info.thumbnail;
+    if (info && info.name) {
+      this.title = info.name;
+      this.cover = info.image_url;
       this.price = info.price;
       this.discountPercentage = info.discountPercentage;
       this.discount = this.getDiscountedPrice(info.price, info.discountPercentage);
-      this.stock = info.stock;
+      this.stock = '';
     }
   }
 

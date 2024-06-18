@@ -39,7 +39,7 @@
       <ion-label class="btn" (click)="onOffers()">View All</ion-label>
     </div>
     <swiper-container slides-per-view="1.2" centered-slides="true" space-between="10" speed="400" initial-slide="1">
-      <swiper-slide *ngFor="let item of util.banners" (click)="byCategory('Offers')">
+      <swiper-slide *ngFor="let item of util.banners" (click)="byCategory('Offers','1')">
         <div class="banner-covers" [ngStyle]="{'background-image': 'url('+item+')'}"></div>
       </swiper-slide>
     </swiper-container>
@@ -48,19 +48,19 @@
       <ion-label class="btn" (click)="onBrands()">View All</ion-label>
     </div>
     <ion-row class="brands-list">
-      <ion-col size="4" *ngFor="let item of util.brands.slice(0,6);" (click)="byCategory(item.Brand)">
-        <div class="cover-image" [ngStyle]="{'background-image': 'url('+item.image+')'}"></div>
+      <ion-col size="3" *ngFor="let item of categories.slice(0,6);" (click)="byCategory(item.name,'')">
+        <div class="cover-image" [ngStyle]="{'background-image': 'url('+apiUrl+item.image_url+')'}"></div>
       </ion-col>
     </ion-row>
     <div class="main-title">
       <ion-label class="lbl">Hot Deals</ion-label>
-      <ion-label class="btn" (click)="byCategory('Hot Deals')">View All</ion-label>
+      <ion-label class="btn" (click)="byCategory('Hot Deals','1')">View All</ion-label>
     </div>
     <ion-row class="product-list-grid">
-      <ion-col size="6" *ngFor="let item of util.products.slice(0,12);let i = index;" (click)="onProductInfo(i)">
+      <ion-col size="6" *ngFor="let item of products.slice(0,12);let i = index;" (click)="onProductInfo(i)">
         <ion-card class="product-info" mode="ios">
-          <div class="cover-image" [ngStyle]="{'background-image': 'url('+item.thumbnail+')'}">
-            <div class="discount-banner" *ngIf="item.discountPercentage > 0">
+          <div class="cover-image" [ngStyle]="{'background-image': 'url('+apiUrl+item.image_url+')'}">
+            <div class="discount-banner" *ngIf="item.price.base_price">
               <ion-label class="lbl">{{item.discountPercentage}}%</ion-label>
             </div>
             <div class="heart-icon">
@@ -69,21 +69,21 @@
           </div>
           <div class="bottom-content">
             <ion-label class="title">
-              {{ (item.title.length>20)? (item.title | slice:0:20)+'..':(item.title)}}</ion-label>
+              {{ (item.name.length>20)? (item.name | slice:0:20)+'..':(item.name)}}</ion-label>
             <div class="more-info">
               <ion-icon name="star" color="warning"></ion-icon>
               <ion-label class="lbl"> {{item.rating}} </ion-label>
               <ion-label class="lbl"> | </ion-label>
               <ion-label class="lbl"> > {{item.stock}}</ion-label>
             </div>
-            <ion-label class="sold-by">Sold By : {{ (item.brand.length>14)? (item.brand |
+            <ion-label class="sold-by" *ngIf="item.brand">Sold By : {{ (item.brand.length>14)? (item.brand |
               slice:0:14)+'..':(item.brand)}} </ion-label>
             <ion-label class="price">
-              <span class="active" *ngIf="item.discountPercentage <= 0"> {{item.price}} </span>
+              <span class="active" *ngIf="!item.price.base_price"> {{item.currency}} {{item.price.price_reduce}} </span>
               <span class="active"
-                *ngIf="item.discountPercentage > 0">₹{{getDiscountedPrice(item.price,item.discountPercentage)}}</span>
+                *ngIf="item.price.base_price > 0">{{item.currency}}{{item.price.price_reduce}}</span>
               &nbsp;
-              <span class="deactive" *ngIf="item.discountPercentage > 0">₹{{item.price}}</span>
+              <span class="deactive" *ngIf="item.price.base_price > 0">{{item.currency}}{{item.price.base_price}}</span>
             </ion-label>
             <div class="cart-btn">
               <ion-icon name="bag-add-outline" color="light"></ion-icon>

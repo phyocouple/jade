@@ -1,49 +1,44 @@
-// src/app/services/odoo-auth.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { CapacitorHttp } from '@capacitor/core';
+import { Preferences } from '@capacitor/preferences';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OdooAuthService {
-  private odooBaseUrl = 'https://odoo-ps-pshk-myanmar-online-pharmancy-staging-10550560.dev.odoo.com/'; // Replace with your Odoo instance URL
-  private odooDb = 'odoo-ps-pshk-myanmar-online-pharmancy-staging-10550560'; // Replace with your Odoo database name
+  private readonly SESSION_ID_KEY = 'odoo_session_id';
 
-  constructor(private httpClient: HttpClient) {}
-
-  authenticate(username: string, password: string): Promise<string> {
-    const url = `${this.odooBaseUrl}/web/session/authenticate`;
+  async authenticate(username: string, password: string): Promise<void> {
+    const url = 'http://localhost:3000/odoo/login';
 
     const data = {
-      jsonrpc: '2.0',
-      method: 'call',
-      params: {
-        db: this.odooDb,
-        login: username,
-        password: password,
-      },
+      username: username,
+      password: password,
     };
 
-    // Set the withCredentials option to true to include cookies in the request
-    const options = { withCredentials: true };
-
-    return this.httpClient.post(url , data, options)
-      .toPromise()
-      .then((response: any) => {
-        // Assuming the session_id is returned in the response
-        const session_id: string = response.result.session_id;
-
-        if (session_id) {
-          // Authentication successful, return the session_id
-          return session_id;
-        } else {
-          // Authentication failed, handle the error
-          return Promise.reject('Authentication failed');
+    try {
+      const response = await CapacitorHttp.post({
+        url: url,
+        data: data,
+        headers: {
+          'Content-Type': 'application/json'
         }
-      })
-      .catch(error => {
-        // Handle any errors during the request
-        return Promise.reject(error);
       });
+
+      const sessionId = response.data.sessionId;
+      if (sessionId) {
+        await Preferences.set({ key: this.SESSION_ID_KEY, value: sessionId });
+      } else {
+        throw new Error('Session ID not found in response');
+      }
+    } catch (error) {
+      console.error('Odoo authentication failed', error);
+      throw new Error('Odoo authentication failed');
+    }
+  }
+
+  async getSessionId(): Promise<string | null> {
+    const sessionId = await Preferences.get({ key: this.SESSION_ID_KEY });
+    return sessionId.value;
   }
 }

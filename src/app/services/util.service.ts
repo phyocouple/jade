@@ -1,129 +1,21 @@
-/*
-  Authors : initappz (Rahul Jograna)
-  Website : https://initappz.com/
-  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
-  terms found in the Website https://initappz.com/license
-  Copyright and Good Faith Purchasers © 2023-present initappz.
-*/
 import { Injectable, NgZone } from '@angular/core';
 import { LoadingController, AlertController, ToastController, NavController, MenuController } from '@ionic/angular';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { NavigationExtras, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { OdooAuthService } from './odoo-auth.service'; // Import the OdooAuthService
+import { CapacitorHttp, HttpResponse } from '@capacitor/core';
+import { environment } from 'src/environments/environment';
+import { EcommerceService } from './ecommerce.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilService {
   isLoading = false;
+  sessionId: string | null = null;
 
-  cateList: any[] = [
-    {
-      "name": "Popular",
-      "normal": "assets/images/categories/1.png",
-      "active": "assets/images/categories/1_a.png"
-    },
-    {
-      "name": "smartphones",
-      "normal": "assets/images/categories/2.png",
-      "active": "assets/images/categories/2_a.png"
-    },
-    {
-      "name": "laptops",
-      "normal": "assets/images/categories/3.png",
-      "active": "assets/images/categories/3_a.png"
-    },
-    {
-      "name": "fragrances",
-      "normal": "assets/images/categories/4.png",
-      "active": "assets/images/categories/4_a.png"
-    },
-    {
-      "name": "skincare",
-      "normal": "assets/images/categories/5.png",
-      "active": "assets/images/categories/5_a.png"
-    },
-    {
-      "name": "groceries",
-      "normal": "assets/images/categories/6.png",
-      "active": "assets/images/categories/6_a.png"
-    },
-    {
-      "name": "home-decoration",
-      "normal": "assets/images/categories/7.png",
-      "active": "assets/images/categories/7_a.png"
-    },
-    {
-      "name": "furniture",
-      "normal": "assets/images/categories/8.png",
-      "active": "assets/images/categories/8_a.png"
-    },
-    {
-      "name": "tops",
-      "normal": "assets/images/categories/9.png",
-      "active": "assets/images/categories/9_a.png"
-    },
-    {
-      "name": "womens-dresses",
-      "normal": "assets/images/categories/10.png",
-      "active": "assets/images/categories/10_a.png"
-    },
-    {
-      "name": "womens-shoes",
-      "normal": "assets/images/categories/11.png",
-      "active": "assets/images/categories/11_a.png"
-    },
-    {
-      "name": "mens-shirts",
-      "normal": "assets/images/categories/12.png",
-      "active": "assets/images/categories/12_a.png"
-    },
-    {
-      "name": "mens-shoes",
-      "normal": "assets/images/categories/13.png",
-      "active": "assets/images/categories/13_a.png"
-    },
-    {
-      "name": "mens-watches",
-      "normal": "assets/images/categories/14.png",
-      "active": "assets/images/categories/14_a.png"
-    },
-    {
-      "name": "womens-watches",
-      "normal": "assets/images/categories/15.png",
-      "active": "assets/images/categories/15_a.png"
-    },
-    {
-      "name": "womens-bags",
-      "normal": "assets/images/categories/16.png",
-      "active": "assets/images/categories/16_a.png"
-    },
-    {
-      "name": "womens-jewellery",
-      "normal": "assets/images/categories/17.png",
-      "active": "assets/images/categories/17_a.png"
-    },
-    {
-      "name": "sunglasses",
-      "normal": "assets/images/categories/18.png",
-      "active": "assets/images/categories/18_a.png"
-    },
-    {
-      "name": "automotive",
-      "normal": "assets/images/categories/19.png",
-      "active": "assets/images/categories/19_a.png"
-    },
-    {
-      "name": "motorcycle",
-      "normal": "assets/images/categories/20.png",
-      "active": "assets/images/categories/20_a.png"
-    },
-    {
-      "name": "lighting",
-      "normal": "assets/images/categories/21.png",
-      "active": "assets/images/categories/21_a.png"
-    },
-  ];
+  cateList: any[] = [];
 
   banners: any[] = [
     "assets/images/banners/1.png",
@@ -190,78 +82,6 @@ export class UtilService {
       "image": "assets/images/avatar/2.jpg",
       "name": "Floyd M. Helton"
     },
-    {
-      "image": "assets/images/avatar/3.jpg",
-      "name": "Matthew M. Hernandez"
-    },
-    {
-      "image": "assets/images/avatar/4.jpg",
-      "name": "Candice M. Coffey"
-    },
-    {
-      "image": "assets/images/avatar/5.jpg",
-      "name": "Terrie R. Cobb"
-    },
-    {
-      "image": "assets/images/avatar/6.jpg",
-      "name": "Clarissa C. Wentz"
-    },
-    {
-      "image": "assets/images/avatar/7.jpg",
-      "name": "Shirley J. Arnold"
-    },
-    {
-      "image": "assets/images/avatar/8.jpg",
-      "name": "Jack R. Applegate"
-    },
-    {
-      "image": "assets/images/avatar/9.jpg",
-      "name": "Anita T. Ross"
-    },
-    {
-      "image": "assets/images/avatar/10.jpg",
-      "name": "Dianna K. Wadley"
-    },
-    {
-      "image": "assets/images/avatar/11.jpg",
-      "name": "Rodney R. Ruddy"
-    },
-    {
-      "image": "assets/images/avatar/12.jpg",
-      "name": "Deanna B. Mull"
-    },
-    {
-      "image": "assets/images/avatar/13.jpg",
-      "name": "Michael C. Phelan"
-    },
-    {
-      "image": "assets/images/avatar/14.jpg",
-      "name": "Lorraine S. Jones"
-    },
-    {
-      "image": "assets/images/avatar/15.jpg",
-      "name": "Philip J. Watson"
-    },
-    {
-      "image": "assets/images/avatar/16.jpg",
-      "name": "Patricia R. James"
-    },
-    {
-      "image": "assets/images/avatar/17.jpg",
-      "name": "Dena C. Fernandez"
-    },
-    {
-      "image": "assets/images/avatar/18.jpg",
-      "name": "Troy S. Gaines"
-    },
-    {
-      "image": "assets/images/avatar/19.jpg",
-      "name": "Robin K. Miller"
-    },
-    {
-      "image": "assets/images/avatar/20.jpg",
-      "name": "Willie K. Rothermel"
-    },
   ];
 
   chatList: any[] = [
@@ -273,67 +93,8 @@ export class UtilService {
       "from": "b",
       "message": "	😃	😃	😃Yeah that is crazy, but people can change their own picture and build their own Twitter conversation with this generator, so it does not matter that you are an egg",
     },
-    {
-      "from": "a",
-      "message": "Thanks mate! Feel way better now. Oh, and guys, these messages will be removed once your add your own :-)"
-    },
-    {
-      "from": "b",
-      "message": "You can then edit a message by clicking on it. This way you can change the text, status (check marks) and time. You can also determine whether the message was sent by the sender (right) or receiver (left)."
-    },
-    {
-      "from": "a",
-      "message": "😀😀You can change the order of messages by dragging and dropping them."
-    },
-    {
-      "from": "b",
-      "message": "Finally, click  (top right) to download your fake chat as an image."
-    },
-    {
-      "from": "a",
-      "message": "😀😀Thanks mate! Feel way better now. Oh, and guys, these messages will be removed once your add your own :-)"
-    },
-    {
-      "from": "b",
-      "message": "You also have the facility to hide the header and footer if needed."
-    },
-    {
-      "from": "a",
-      "message": "😀😀😀Customize the clock time and battery percentage as per your satisfaction."
-    },
-    {
-      "from": "b",
-      "message": "Now, make all the required changes for Person 2 also."
-    },
-    {
-      "from": "a",
-      "message": "If satisfied, download the chat and share with all your close friends and relatives, and note their reactions."
-    },
-    {
-      "from": "b",
-      "message": "😀😀Privacy comes first. Our tool does not store any data or chats by keeping in mind the privacy of our users"
-    },
-    {
-      "from": "a",
-      "message": "😀😀😀😀Our android text generator tool has an easy-to-use interface for the ease of the users. Also, the results generated by our tool are fast and realistic"
-    },
-    {
-      "from": "b",
-      "message": "Message privately. End-to-end encryption and privacy controls. Stay connected. Message and call for free* around the world. Build community. Group conversations made simple. Express yourself. Say it with stickers, voice, GIFs and more. WhatsApp business. Reach your customers from anywhere."
-    },
-    {
-      "from": "a",
-      "message": "Send a single message to multiple people at once"
-    },
-    {
-      "from": "b",
-      "message": "You can now send messages in bold, italics or strikethrough too. Simply use the special characters before and after the words to get the formatting of your choice"
-    },
-    {
-      "from": "a",
-      "message": "If you want to know who you are chatting too much with on WhatsApp, you can find out by simply scrolling through the chat screen"
-    }
   ];
+
   constructor(
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
@@ -343,11 +104,46 @@ export class UtilService {
     private router: Router,
     private zone: NgZone,
     private http: HttpClient,
+    private odooAuthService: OdooAuthService,
+    public ecommerceService: EcommerceService
   ) {
+    this.loadCategories();
     this.getLocalAssets('product.json').then((data: any) => {
       this.products = data;
     });
     console.log(this.cateList.length);
+  }
+
+  public async loadCategories() {
+    try {
+      const categories = await this.ecommerceService.getPublicCategories();
+      this.cateList = categories.map(category => ({
+        ...category,
+        normal: `${environment.apiUrl}${category.image_url}`,
+        active: `${environment.apiUrl}${category.image_url}`,
+      }));
+    } catch (error) {
+      console.error('Error loading categories', error);
+    }
+  }
+
+  async getPublicCategories(): Promise<any> {
+    const body = {
+      jsonrpc: "2.0",
+      method: "call",
+      params: {
+
+      },
+      id: null
+    };
+
+    const options = {
+      url: `${environment.apiUrl}/api/categories`,
+      headers: { 'Content-Type': 'application/json'},
+      data: { foo: 'bar' },
+    };
+    const response: HttpResponse = await CapacitorHttp.post(options);
+    return response.data.result
   }
 
   changeMenuItems(action: boolean) {
@@ -548,4 +344,6 @@ export class UtilService {
       });
     });
   }
+
+
 }

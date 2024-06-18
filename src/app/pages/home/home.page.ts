@@ -1,25 +1,24 @@
-/*
-  Authors : initappz (Rahul Jograna)
-  Website : https://initappz.com/
-  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
-  terms found in the Website https://initappz.com/license
-  Copyright and Good Faith Purchasers © 2023-present initappz.
-*/
 import { Component, OnInit } from '@angular/core';
 import { UtilService } from 'src/app/services/util.service';
 import { NavigationExtras } from '@angular/router';
 import { SearchPage } from '../search/search.page';
 import { register } from 'swiper/element';
 import { ModalController } from '@ionic/angular';
+import { Product, Category } from 'src/app/models/ecommerce.model';
+import { environment } from 'src/environments/environment';
 
 register();
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  cateName: any = '';
+  cateName: string = '';
+  apiUrl: string = environment.apiUrl;
+  categories: Category[] = [];
+  products: Product[] = [];
   slideOpts = {
     initialSlide: 1,
     speed: 400,
@@ -28,28 +27,63 @@ export class HomePage implements OnInit {
     centeredSlides: true,
     autoplay: true
   };
+
   constructor(
     public util: UtilService,
     private modalController: ModalController
-  ) {
-    this.cateName = this.util.cateList[0].name;
-  }
+  ) {}
 
   ngOnInit() {
+    this.loadData();
+  }
+
+  async loadData() {
+    try {
+      await this.loadCategories();
+      await this.loadProducts();
+    } catch (error) {
+      console.error('Error loading data', error);
+    }
+  }
+
+  async loadCategories() {
+    try {
+      await this.util.loadCategories();
+      this.categories = this.util.cateList;
+      this.cateName = this.categories.length > 0 ? this.categories[0].name : '';
+    } catch (error) {
+      console.error('Error loading categories', error);
+    }
+  }
+
+  async loadProducts() {
+    const filters = {
+      page: 1,
+      category: '',
+      search: '',
+      min_price: 1,
+      max_price: '',
+      ppg: 20
+    };
+
+    try {
+      const response = await this.util.ecommerceService.getProductList(filters);
+      this.products = response.result.products;
+    } catch (error) {
+      console.error('Error loading products', error);
+    }
   }
 
   segmentChanged(event: any) {
-    // console.log(event);
+    // Handle segment change event
   }
 
-  getDiscountedPrice(price: any, discount: any) {
-    var numVal1 = Number(price);
-    var numVal2 = Number(discount) / 100;
-    var totalValue = numVal1 - (numVal1 * numVal2)
-    return totalValue.toFixed(2);
+  getDiscountedPrice(price: number, discount: number): string {
+    const discountedPrice = price - (price * (discount / 100));
+    return discountedPrice.toFixed(2);
   }
 
-  onProductInfo(index: any) {
+  onProductInfo(index: number) {
     const param: NavigationExtras = {
       queryParams: {
         id: index
@@ -66,10 +100,11 @@ export class HomePage implements OnInit {
     this.util.navigateToPage('brands');
   }
 
-  byCategory(name: string) {
+  byCategory(name: string, id: any) {
     const param: NavigationExtras = {
       queryParams: {
-        name: name
+        name: name,
+        id: id
       }
     };
     this.util.navigateToPage('by-category', param);
@@ -85,5 +120,4 @@ export class HomePage implements OnInit {
   onChat() {
     this.util.navigateToPage('chats');
   }
-
 }

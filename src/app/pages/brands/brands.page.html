@@ -19,10 +19,11 @@
 <ion-content>
   <div class="home-screen">
     <ion-row class="brands-list">
-      <ion-col size="4" *ngFor="let item of util.brands;" (click)="byCategory(item.Brand)">
-        <div class="cover-image" [ngStyle]="{'background-image': 'url('+item.image+')'}"></div>
+      <ion-col size="3" *ngFor="let item of util.cateList;" (click)="byCategory(item.name,item.id)">
+        <div class="cover-image" [ngStyle]="{'background-image': 'url('+apiUrl+item.image_url+')'}"></div>
+        <ion-label class="lbl">
+          {{ (item.name.length>20)? (item.name | slice:0:20)+'..':(item.name)}}</ion-label>
       </ion-col>
     </ion-row>
-
   </div>
 </ion-content>

@@ -7,7 +7,7 @@
   "proxies": [
     {
       "path": "/api",
-      "proxyUrl": "http://localhost:8069"
+      "proxyUrl": "https://odoo-ps-pshk-myanmar-online-pharmancy-staging-jun-13632668.dev.odoo.com/"
     }
   ]
 }

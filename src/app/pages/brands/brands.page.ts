@@ -8,6 +8,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras } from '@angular/router';
 import { UtilService } from 'src/app/services/util.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-brands',
@@ -15,7 +16,7 @@ import { UtilService } from 'src/app/services/util.service';
   styleUrls: ['./brands.page.scss'],
 })
 export class BrandsPage implements OnInit {
-
+  apiUrl: string = environment.apiUrl;
   constructor(
     public util: UtilService
   ) { }
@@ -27,10 +28,11 @@ export class BrandsPage implements OnInit {
     this.util.onBack();
   }
 
-  byCategory(name: string) {
+  byCategory(name: string, id: number) {
     const param: NavigationExtras = {
       queryParams: {
-        name: name
+        name: name,
+        id: id
       }
     };
     this.util.navigateToPage('by-category', param);

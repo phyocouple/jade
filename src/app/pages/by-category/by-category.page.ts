@@ -1,16 +1,11 @@
-/*
-  Authors : initappz (Rahul Jograna)
-  Website : https://initappz.com/
-  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
-  terms found in the Website https://initappz.com/license
-  Copyright and Good Faith Purchasers © 2023-present initappz.
-*/
 import { Component, OnInit } from '@angular/core';
 import { UtilService } from 'src/app/services/util.service';
 import { ActivatedRoute, NavigationExtras } from '@angular/router';
 import { SearchPage } from '../search/search.page';
 import { FilterPage } from '../filter/filter.page';
 import { ModalController } from '@ionic/angular';
+import { Product } from 'src/app/models/ecommerce.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-by-category',
@@ -18,32 +13,43 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./by-category.page.scss'],
 })
 export class ByCategoryPage implements OnInit {
-  name: any = '';
+  name: string = '';
+  id: string = '';
+  products: Product[] = [];
+  page: number = 1;
+  ppg: number = 20;
+  totalPages: number = 0;
+  apiUrl: string = environment.apiUrl;
+
   constructor(
     public util: UtilService,
     private route: ActivatedRoute,
     private modalController: ModalController
   ) {
     this.route.queryParams.subscribe((data: any) => {
-      this.name = data.name;
-    })
+      if (this.name !== data.name) {
+        this.name = data.name;
+        this.id = data.id;
+        this.resetState();
+        this.loadProductsByCategory();
+      }
+    });
   }
 
   ngOnInit() {
+    this.loadProductsByCategory();
   }
 
   onBack() {
     this.util.onBack();
   }
 
-  getDiscountedPrice(price: any, discount: any) {
-    var numVal1 = Number(price);
-    var numVal2 = Number(discount) / 100;
-    var totalValue = numVal1 - (numVal1 * numVal2)
-    return totalValue.toFixed(2);
+  getDiscountedPrice(price: number, discount: number): string {
+    const discountedPrice = price - (price * (discount / 100));
+    return discountedPrice.toFixed(2);
   }
 
-  onProductInfo(index: any) {
+  onProductInfo(index: number) {
     const param: NavigationExtras = {
       queryParams: {
         id: index
@@ -66,4 +72,59 @@ export class ByCategoryPage implements OnInit {
     await modal.present();
   }
 
+  private async loadProductsByCategory() {
+    try {
+      const filters = {
+        page: this.page,
+        category: this.id,
+        search: '',
+        min_price: 0,
+        max_price: 10000,
+        ppg: this.ppg
+      };
+
+      const response = await this.util.ecommerceService.getProductList(filters);
+      this.products = response.result.products;
+      this.totalPages = response.result.pager.pages;
+    } catch (error) {
+      console.error('Error loading products by category', error);
+    }
+  }
+
+  async loadMoreProducts(event: any) {
+    this.page++;
+    if (this.page > this.totalPages) {
+      event.target.disabled = true;
+      return;
+    }
+
+    try {
+      const filters = {
+        page: this.page,
+        category: this.id,
+        search: '',
+        min_price: 0,
+        max_price: 10000,
+        ppg: this.ppg
+      };
+
+      const response = await this.util.ecommerceService.getProductList(filters);
+      this.products = [...this.products, ...response.result.products];
+      event.target.complete();
+
+      // Disable infinite scroll if we've loaded all products
+      if (this.page >= this.totalPages) {
+        event.target.disabled = true;
+      }
+    } catch (error) {
+      console.error('Error loading more products', error);
+      event.target.complete(); // Complete the event even if there's an error to avoid endless loading
+    }
+  }
+
+  private resetState() {
+    this.products = [];
+    this.page = 1;
+    this.totalPages = 0;
+  }
 }

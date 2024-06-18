@@ -54,16 +54,24 @@ export class LoginPage {
     this.util.navigateToPage('reset-password');
   }
 
-  loginUser() {
-    this.odooAuthService.authenticate(this.userEmailOrPhone, this.userPassword)
-      .then(response => {
-        console.log('Authentication successful', response);
+  async loginUser() {
+    try {
+      await this.odooAuthService.authenticate(this.userEmailOrPhone, this.userPassword);
+
+      // Authentication successful, check if session_id has been stored
+      const sessionId = await this.odooAuthService.getSessionId();
+
+      if (sessionId) {
+        console.log('Session ID successfully retrieved and stored:', sessionId);
         // Handle successful authentication, e.g., navigate to another page
         this.onHome();
-      })
-      .catch(error => {
-        console.error('Authentication failed', error);
-        // Handle authentication error, show error message, etc.
-      });
+      } else {
+        console.warn('Session ID not found');
+        // Handle case where session ID is not found
+      }
+    } catch (error) {
+      console.error('Authentication failed:', error);
+      // Handle authentication error, show error message, etc.
+    }
   }
 }
