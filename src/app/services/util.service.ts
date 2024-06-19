@@ -12,6 +12,7 @@ import { EcommerceService } from './ecommerce.service';
   providedIn: 'root'
 })
 export class UtilService {
+  apiUrl = environment.apiUrl;
   isLoading = false;
   sessionId: string | null = null;
 
@@ -144,6 +145,10 @@ export class UtilService {
     };
     const response: HttpResponse = await CapacitorHttp.post(options);
     return response.data.result
+  }
+
+  getApiUrl(): string {
+    return this.apiUrl;
   }
 
   changeMenuItems(action: boolean) {

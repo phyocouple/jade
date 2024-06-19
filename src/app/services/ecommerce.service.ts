@@ -66,6 +66,53 @@ export class EcommerceService {
     }
   }
 
+  async getProductDetail(productId: number): Promise<any> {
+    const options = {
+      url: `${this.apiUrl}/api/product/${productId}`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: { id: productId } // JSON body
+    };
+
+    const response: HttpResponse = await CapacitorHttp.request(options);
+    return response.data;
+  }
+
+  async getCombinationInfo(productTemplateId: number, productId: number, combination: any, addQty: number) {
+    const body = {
+      jsonrpc: "2.0",
+      method: "call",
+      params: {
+        product_template_id: productTemplateId,
+        product_id: productId,
+        combination: combination,
+        add_qty: addQty,
+        pricelist_id: false,
+        parent_combination: []
+      },
+      id: new Date().getTime()
+    };
+  
+    const options = {
+      url: `${this.apiUrl}/api/product/combinations`,
+      headers: { 'Content-Type': 'application/json' },
+      data: body,
+    };
+  
+    try {
+      const response: HttpResponse = await CapacitorHttp.post(options);
+      const data: ApiResponse<any> = response.data;
+      if (data.result) {
+        return data.result;
+      } else {
+        throw new Error(data.error ? data.error.message : 'Unknown error');
+      }
+    } catch (error) {
+      console.error('Error fetching combination info', error);
+      throw new Error('Failed to fetch combination info');
+    }
+  }
+  
   async getPublicCategories(): Promise<Category[]> {
     const body = {
       jsonrpc: "2.0",
@@ -73,13 +120,13 @@ export class EcommerceService {
       params: {},
       id: null
     };
-
+  
     const options = {
       url: `${this.apiUrl}/api/categories`,
       headers: { 'Content-Type': 'application/json' },
       data: body,
     };
-
+  
     try {
       const response: HttpResponse = await CapacitorHttp.post(options);
       const data: ApiResponse<Category[]> = response.data;
@@ -93,6 +140,7 @@ export class EcommerceService {
       throw new Error('Failed to fetch categories');
     }
   }
+  
 
   // Add more e-commerce-related methods as needed
 }

@@ -57,7 +57,7 @@
       <ion-label class="btn" (click)="byCategory('Hot Deals','1')">View All</ion-label>
     </div>
     <ion-row class="product-list-grid">
-      <ion-col size="6" *ngFor="let item of products.slice(0,12);let i = index;" (click)="onProductInfo(i)">
+      <ion-col size="6" *ngFor="let item of products" (click)="onProductInfo(item.id)">
         <ion-card class="product-info" mode="ios">
           <div class="cover-image" [ngStyle]="{'background-image': 'url('+apiUrl+item.image_url+')'}">
             <div class="discount-banner" *ngIf="item.price.base_price">
