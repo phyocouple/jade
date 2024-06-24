@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { VariationsModalPage } from '../variations-modal/variations-modal.page';
 import Swiper from 'swiper';
 import { register } from 'swiper/element';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { ApiResponse, Product } from 'src/app/models/ecommerce.model';
 
 register();
@@ -37,11 +37,13 @@ export class ProductInfoPage implements OnInit {
   product: Product | null = null;
   selectedAttributes: { [key: number]: number } = {};  // Map attribute_id to value_id
   isCombinationValid: boolean = true;
+  quantity: number = 1
 
   constructor(
     public util: UtilService,
     private route: ActivatedRoute,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private toastController: ToastController
   ) {
     this.route.queryParams.subscribe((data: any) => {
       this.id = data.id;
@@ -165,6 +167,47 @@ export class ProductInfoPage implements OnInit {
       }
     } catch (error) {
       console.error('Error updating product info with combination', error);
+    }
+  }
+  async addToCart() {
+    const variantValues = this.getCombinationAttributes();
+    const productCustomAttributeValues: any[] = [];  // Explicitly define the type
+    const pricelistId = false;
+    const forceDialog = false;
+    const noAttribute: any[] = [];
+    const customAttribute: any[] = [];
+    const context = {
+      quantity: this.quantity,
+      website_id: 1,
+      lang: 'en_US'
+    };
+
+    try {
+      const response = await this.util.ecommerceService.addToCart(
+        this.product!.id,
+        this.quantity,
+        variantValues,
+        productCustomAttributeValues,
+        pricelistId,
+        forceDialog,
+        noAttribute,
+        customAttribute,
+        context
+      );
+      const toast = await this.toastController.create({
+        message: `Added to cart successfully.`,
+        duration: 2000,
+        position: 'top'
+      });
+      await toast.present();
+    } catch (error) {
+      const toast = await this.toastController.create({
+        message: 'Failed to add to cart. Please try again.',
+        duration: 2000,
+        position: 'top'
+      });
+      await toast.present();
+      console.error('Error adding to cart', error);
     }
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CapacitorHttp } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
+import { CapacitorCookies } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,12 @@ export class OdooAuthService {
       const sessionId = response.data.sessionId;
       if (sessionId) {
         await Preferences.set({ key: this.SESSION_ID_KEY, value: sessionId });
+        await CapacitorCookies.setCookie({
+          url: 'http://localhost:8081', // Use your actual backend URL here
+          key: 'session_id',
+          value: sessionId,
+          path: '/',
+        });
       } else {
         throw new Error('Session ID not found in response');
       }
@@ -40,5 +47,9 @@ export class OdooAuthService {
   async getSessionId(): Promise<string | null> {
     const sessionId = await Preferences.get({ key: this.SESSION_ID_KEY });
     return sessionId.value;
+  }
+
+  getCookies(): string {
+    return document.cookie;
   }
 }

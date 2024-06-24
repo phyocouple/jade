@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 import { Product, Category, ApiResponse, ProductListResponse } from '../models/ecommerce.model';
+import { OdooAuthService } from './odoo-auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +12,7 @@ export class EcommerceService {
 
   public apiUrl: string = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
-
-  private getHttpOptions() {
-    return {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    };
-  }
+  constructor(private http: HttpClient, private odooAuthService: OdooAuthService) {}
 
   private calculateDiscountPercentage(basePrice: number, reducedPrice: number): number {
     if (basePrice === 0) return 0;
@@ -140,7 +133,59 @@ export class EcommerceService {
       throw new Error('Failed to fetch categories');
     }
   }
-  
+  private async getHttpOptions() {
+    const sessionId = await this.odooAuthService.getSessionId();
+    return {
+      'Content-Type': 'application/json',
+    };
+  }
 
-  // Add more e-commerce-related methods as needed
+  async addToCart(
+    productId: number,
+    quantity: number,
+    variantValues: number[],
+    productCustomAttributeValues: any[],
+    pricelistId: boolean,
+    forceDialog: boolean,
+    noAttribute: any[],
+    customAttribute: any[],
+    context: any
+  ): Promise<any> {
+    const body = {
+      jsonrpc: "2.0",
+      method: "call",
+      params: {
+        product_id: productId,
+        variant_values: variantValues,
+        product_custom_attribute_values: productCustomAttributeValues,
+        pricelist_id: pricelistId,
+        add_qty: quantity,
+        force_dialog: forceDialog,
+        no_attribute: noAttribute,
+        custom_attribute: customAttribute,
+        context: context
+      },
+      id: new Date().getTime()
+    };
+
+    const options = {
+      url: `${this.apiUrl}/api/cart/update_json`,
+      headers: {'Content-Type': 'application/json'},
+      data: body,
+    };
+
+    try {
+      const response: HttpResponse = await CapacitorHttp.post(options);
+      const data: ApiResponse<any> = response.data;
+      if (data.result) {
+        return data.result;
+      } else {
+        throw new Error(data.error ? data.error.message : 'Unknown error');
+      }
+    } catch (error) {
+      console.error('Error adding to cart', error);
+      throw new Error('Failed to add to cart');
+    }
+  }
+
 }
