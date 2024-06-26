@@ -6,5 +6,8 @@
   Copyright and Good Faith Purchasers © 2023-present initappz.
 */
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: 'https://devstg.mymedicine.com.mm',
+  db: 'odoo-ps-pshk-myanmar-online-pharmancy-staging-jun-13632668',
+  rdmString: '1111111111111111111111111111'
 };

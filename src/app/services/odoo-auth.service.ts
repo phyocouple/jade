@@ -8,13 +8,19 @@ import { CapacitorCookies } from '@capacitor/core';
 })
 export class OdooAuthService {
   private readonly SESSION_ID_KEY = 'odoo_session_id';
+  private readonly ODOO_URL = 'https://devstg.mymedicine.com.mm';
+  private readonly ODOO_DB = 'odoo-ps-pshk-myanmar-online-pharmancy-staging-jun-13632668';
 
   async authenticate(username: string, password: string): Promise<void> {
-    const url = 'http://localhost:3000/odoo/login';
+    const url = `${this.ODOO_URL}/web/session/authenticate`;
 
     const data = {
-      username: username,
-      password: password,
+      jsonrpc: "2.0",
+      params: {
+        db: this.ODOO_DB,
+        login: username,
+        password: password,
+      },
     };
 
     try {
@@ -26,17 +32,25 @@ export class OdooAuthService {
         }
       });
 
-      const sessionId = response.data.sessionId;
-      if (sessionId) {
-        await Preferences.set({ key: this.SESSION_ID_KEY, value: sessionId });
-        await CapacitorCookies.setCookie({
-          url: 'http://localhost:8081', // Use your actual backend URL here
-          key: 'session_id',
-          value: sessionId,
-          path: '/',
-        });
+      // Extract cookies from the response headers
+      const setCookieHeader = response.headers['set-cookie'];
+      if (setCookieHeader) {
+        const cookies = setCookieHeader.split(';');
+        const sessionCookie = cookies.find(cookie => cookie.trim().startsWith('session_id='));
+        if (sessionCookie) {
+          const sessionId = sessionCookie.split('=')[1];
+          await Preferences.set({ key: this.SESSION_ID_KEY, value: sessionId });
+          await CapacitorCookies.setCookie({
+            url: this.ODOO_URL,
+            key: 'session_id',
+            value: sessionId,
+            path: '/',
+          });
+        } else {
+          throw new Error('Session ID not found in cookies');
+        }
       } else {
-        throw new Error('Session ID not found in response');
+        throw new Error('Set-Cookie header not found in response');
       }
     } catch (error) {
       console.error('Odoo authentication failed', error);

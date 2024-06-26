@@ -7,7 +7,7 @@
 */
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8081/',
+  apiUrl: 'https://devstg.mymedicine.com.mm/',
   db: 'odoo-ps-pshk-myanmar-online-pharmancy-staging-jun-13632668',
   rdmString: '1111111111111111111111111111'
 };
