@@ -76,6 +76,8 @@ export interface Category {
   id: number;
   name: string;
   image_url: string;
+  sequence: number;
+  parent_id?:any
 }
 
 export interface ApiResponse<T> {
@@ -84,3 +86,4 @@ export interface ApiResponse<T> {
   result: T;
   error?: any;
 }
+

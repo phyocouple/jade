@@ -9,6 +9,10 @@ import { environment } from 'src/environments/environment';
 
 register();
 
+interface ProductCategory {
+  [key: string]: Product[];
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -19,6 +23,8 @@ export class HomePage implements OnInit {
   apiUrl: string = environment.apiUrl;
   categories: Category[] = [];
   products: Product[] = [];
+  productsByCategory: ProductCategory = {};  // Type annotation
+  loading: boolean = true;
   slideOpts = {
     initialSlide: 1,
     speed: 400,
@@ -39,10 +45,15 @@ export class HomePage implements OnInit {
 
   async loadData() {
     try {
+      this.loading = true;
       await this.loadCategories();
       await this.loadProducts();
+      this.groupProductsByCategory();
     } catch (error) {
       console.error('Error loading data', error);
+    }
+    finally {
+      this.loading = false;
     }
   }
 
@@ -72,6 +83,22 @@ export class HomePage implements OnInit {
     } catch (error) {
       console.error('Error loading products', error);
     }
+  }
+
+  groupProductsByCategory() {
+    const promotionCategory = this.categories.find(category => category.name.toLowerCase() === 'promotion');
+    if (!promotionCategory) return;
+
+    const subcategories = this.categories.filter(category => category.parent_id === promotionCategory.id);
+    const groupedProducts: ProductCategory = {};
+
+    for (const subcategory of subcategories) {
+      groupedProducts[subcategory.name] = this.products
+        .filter(product => product.categories.includes(subcategory.name))
+        .slice(0, 6); // Limit to 6 products per subcategory
+    }
+
+    this.productsByCategory = groupedProducts;
   }
 
   segmentChanged(event: any) {
@@ -119,5 +146,11 @@ export class HomePage implements OnInit {
 
   onChat() {
     this.util.navigateToPage('chats');
+  }
+
+  doRefresh(event: any) {
+    // Refresh the data
+    this.loadData();
+    event.target.complete();
   }
 }
