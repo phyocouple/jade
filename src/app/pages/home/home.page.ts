@@ -6,12 +6,9 @@ import { register } from 'swiper/element';
 import { ModalController } from '@ionic/angular';
 import { Product, Category } from 'src/app/models/ecommerce.model';
 import { environment } from 'src/environments/environment';
+import { EcommerceService } from 'src/app/services/ecommerce.service';
 
 register();
-
-interface ProductCategory {
-  [key: string]: Product[];
-}
 
 @Component({
   selector: 'app-home',
@@ -22,8 +19,7 @@ export class HomePage implements OnInit {
   cateName: string = '';
   apiUrl: string = environment.apiUrl;
   categories: Category[] = [];
-  products: Product[] = [];
-  productsByCategory: ProductCategory = {};  // Type annotation
+  categoriesWithProducts: Category[] = [];
   loading: boolean = true;
   slideOpts = {
     initialSlide: 1,
@@ -36,7 +32,8 @@ export class HomePage implements OnInit {
 
   constructor(
     public util: UtilService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private ecommerceService: EcommerceService
   ) {}
 
   ngOnInit() {
@@ -47,12 +44,10 @@ export class HomePage implements OnInit {
     try {
       this.loading = true;
       await this.loadCategories();
-      await this.loadProducts();
-      this.groupProductsByCategory();
+      await this.loadHomeCategories();
     } catch (error) {
       console.error('Error loading data', error);
-    }
-    finally {
+    } finally {
       this.loading = false;
     }
   }
@@ -67,53 +62,23 @@ export class HomePage implements OnInit {
     }
   }
 
-  async loadProducts() {
-    const filters = {
-      page: 1,
-      category: '',
-      search: '',
-      min_price: 1,
-      max_price: '',
-      ppg: 20
-    };
-
+  async loadHomeCategories() {
     try {
-      const response = await this.util.ecommerceService.getProductList(filters);
-      this.products = response.result.products;
+      const data = await this.ecommerceService.getHomeCategories();
+      this.categoriesWithProducts = data.result.categories;
     } catch (error) {
-      console.error('Error loading products', error);
+      console.error('Error fetching home categories with products', error);
     }
-  }
-
-  groupProductsByCategory() {
-    const promotionCategory = this.categories.find(category => category.name.toLowerCase() === 'promotion');
-    if (!promotionCategory) return;
-
-    const subcategories = this.categories.filter(category => category.parent_id === promotionCategory.id);
-    const groupedProducts: ProductCategory = {};
-
-    for (const subcategory of subcategories) {
-      groupedProducts[subcategory.name] = this.products
-        .filter(product => product.categories.includes(subcategory.name))
-        .slice(0, 6); // Limit to 6 products per subcategory
-    }
-
-    this.productsByCategory = groupedProducts;
   }
 
   segmentChanged(event: any) {
     // Handle segment change event
   }
 
-  getDiscountedPrice(price: number, discount: number): string {
-    const discountedPrice = price - (price * (discount / 100));
-    return discountedPrice.toFixed(2);
-  }
-
-  onProductInfo(index: number) {
+  onProductInfo(productId: number) {
     const param: NavigationExtras = {
       queryParams: {
-        id: index
+        id: productId
       }
     };
     this.util.navigateToPage('product-info', param);
@@ -149,8 +114,8 @@ export class HomePage implements OnInit {
   }
 
   doRefresh(event: any) {
-    // Refresh the data
-    this.loadData();
-    event.target.complete();
+    this.loadData().then(() => {
+      event.target.complete();
+    });
   }
 }

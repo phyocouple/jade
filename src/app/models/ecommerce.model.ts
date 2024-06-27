@@ -78,6 +78,21 @@ export interface Category {
   image_url: string;
   sequence: number;
   parent_id?:any
+  start_date: string;
+  end_date: string;
+  banner_image_url: string;
+  display_column: number;
+  custom_title: boolean;
+  hide_price: boolean;
+  products: Product[];
+}
+
+export interface HomeCategoriesResponse {
+  jsonrpc: string;
+  id: any;
+  result: {
+    categories: Category[];
+  };
 }
 
 export interface ApiResponse<T> {

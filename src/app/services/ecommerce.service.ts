@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
-import { Product, Category, ApiResponse, ProductListResponse } from '../models/ecommerce.model';
+import { Product, Category, ApiResponse, ProductListResponse, HomeCategoriesResponse } from '../models/ecommerce.model';
 import { OdooAuthService } from './odoo-auth.service';
 
 @Injectable({
@@ -38,7 +38,7 @@ export class EcommerceService {
     };
 
     const options = {
-      url: `${this.apiUrl}api/shop`,
+      url: `${this.apiUrl}/api/shop`,
       headers: { 'Content-Type': 'application/json' },
       data: body,
     };
@@ -133,6 +133,31 @@ export class EcommerceService {
       throw new Error('Failed to fetch categories');
     }
   }
+
+  async getHomeCategories(): Promise<HomeCategoriesResponse> {
+    const sessionId = await this.odooAuthService.getSessionId();
+    const options = {
+      url: `${this.apiUrl}/api/home_categories`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `session_id=${sessionId}`
+      },
+      data: {
+        jsonrpc: "2.0",
+        params: {}
+      }
+    };
+
+    try {
+      const response: HttpResponse = await CapacitorHttp.request(options);
+      return response.data as HomeCategoriesResponse;
+    } catch (error) {
+      console.error('Error fetching home categories with products', error);
+      throw error;
+    }
+  }
+  
   private async getHttpOptions() {
     const sessionId = await this.odooAuthService.getSessionId();
     return {

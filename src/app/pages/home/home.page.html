@@ -56,45 +56,52 @@
         <div class="cover-image" [ngStyle]="{'background-image': 'url('+apiUrl+item.image_url+')'}"></div>
       </ion-col>
     </ion-row>
-    <div class="main-title">
-      <ion-label class="lbl">Hot Deals</ion-label>
-      <ion-label class="btn" (click)="byCategory('Hot Deals','1')">View All</ion-label>
+    <div *ngFor="let category of categoriesWithProducts" class="category-section">
+      <div class="main-title">
+        <ion-label class="lbl">{{ category.custom_title || category.name }}</ion-label>
+        <ion-label class="btn" (click)="byCategory(category.name, category.id)">View All</ion-label>
+      </div>
+      <ion-item lines="none">
+        <img [src]="category.banner_image_url" alt="{{ category.name }} banner" />
+      </ion-item>
+      <ion-row class="product-list-grid">
+        <ion-col [size]="category.display_column || 6" *ngFor="let item of category.products" (click)="onProductInfo(item.id)">
+          <ion-card class="product-info" mode="ios">
+            <div class="cover-image" [ngStyle]="{'background-image': 'url('+item.image_url+')'}">
+              <div class="discount-banner" *ngIf="item.price.base_price">
+                <ion-label class="lbl">{{item.discountPercentage}}%</ion-label>
+              </div>
+              <div class="heart-icon">
+                <ion-icon name="heart" color="light"></ion-icon>
+              </div>
+            </div>
+            <div class="bottom-content">
+              <ion-label class="title">
+                {{ (item.name.length > 20) ? (item.name | slice:0:20) + '..' : (item.name) }}
+              </ion-label>
+              <div class="more-info">
+                <ion-icon name="star" color="warning"></ion-icon>
+                <ion-label class="lbl"> {{item.rating}} </ion-label>
+                <ion-label class="lbl"> | </ion-label>
+                <ion-label class="lbl"> > {{item.stock}}</ion-label>
+              </div>
+              <ion-label class="sold-by" *ngIf="item.brand">Sold By: {{ (item.brand.length > 14) ? (item.brand | slice:0:14) + '..' : (item.brand) }} </ion-label>
+              <ion-label class="price">
+                <span class="active" *ngIf="!item.price.base_price"> {{item.currency}} {{item.price.price_reduce}} </span>
+                <span class="active" *ngIf="item.price.base_price > 0">{{item.currency}}{{item.price.price_reduce}}</span>
+                &nbsp;
+                <span class="deactive" *ngIf="item.price.base_price > 0">{{item.currency}}{{item.price.base_price}}</span>
+              </ion-label>
+              <div class="cart-btn">
+                <ion-icon name="bag-add-outline" color="light"></ion-icon>
+              </div>
+            </div>
+          </ion-card>
+        </ion-col>
+      </ion-row>
     </div>
-    <ion-row class="product-list-grid">
-      <ion-col size="6" *ngFor="let item of products" (click)="onProductInfo(item.id)">
-        <ion-card class="product-info" mode="ios">
-          <div class="cover-image" [ngStyle]="{'background-image': 'url('+apiUrl+item.image_url+')'}">
-            <div class="discount-banner" *ngIf="item.price.base_price">
-              <ion-label class="lbl">{{item.discountPercentage}}%</ion-label>
-            </div>
-            <div class="heart-icon">
-              <ion-icon name="heart" color="light"></ion-icon>
-            </div>
-          </div>
-          <div class="bottom-content">
-            <ion-label class="title">
-              {{ (item.name.length>20)? (item.name | slice:0:20)+'..':(item.name)}}</ion-label>
-            <div class="more-info">
-              <ion-icon name="star" color="warning"></ion-icon>
-              <ion-label class="lbl"> {{item.rating}} </ion-label>
-              <ion-label class="lbl"> | </ion-label>
-              <ion-label class="lbl"> > {{item.stock}}</ion-label>
-            </div>
-            <ion-label class="sold-by" *ngIf="item.brand">Sold By : {{ (item.brand.length>14)? (item.brand |
-              slice:0:14)+'..':(item.brand)}} </ion-label>
-            <ion-label class="price">
-              <span class="active" *ngIf="!item.price.base_price"> {{item.currency}} {{item.price.price_reduce}} </span>
-              <span class="active"
-                *ngIf="item.price.base_price > 0">{{item.currency}}{{item.price.price_reduce}}</span>
-              &nbsp;
-              <span class="deactive" *ngIf="item.price.base_price > 0">{{item.currency}}{{item.price.base_price}}</span>
-            </ion-label>
-            <div class="cart-btn">
-              <ion-icon name="bag-add-outline" color="light"></ion-icon>
-            </div>
-          </div>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+    
+    
+    
   </div>
 </ion-content>
