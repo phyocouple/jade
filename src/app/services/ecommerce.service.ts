@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 import { Product, Category, ApiResponse, ProductListResponse, HomeCategoriesResponse } from '../models/ecommerce.model';
@@ -12,7 +11,7 @@ export class EcommerceService {
 
   public apiUrl: string = environment.apiUrl;
 
-  constructor(private http: HttpClient, private odooAuthService: OdooAuthService) {}
+  constructor(private odooAuthService: OdooAuthService) {}
 
   private calculateDiscountPercentage(basePrice: number, reducedPrice: number): number {
     if (basePrice === 0) return 0;
@@ -29,6 +28,31 @@ export class EcommerceService {
     });
   }
 
+  private async getHttpOptions() {
+    const sessionId = await this.odooAuthService.getSessionId();
+    return {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': sessionId ? `session_id=${sessionId}` : ''
+      },
+      withCredentials: true,
+    };
+  }
+
+  private async handleResponse<T>(response: HttpResponse): Promise<T> {
+    // Check for session ID in the response cookies
+    const setCookieHeader = response.headers['set-cookie'] || response.headers['Set-Cookie'];
+    if (setCookieHeader) {
+      const cookies = setCookieHeader.split(';');
+      const sessionCookie = cookies.find(cookie => cookie.trim().startsWith('session_id='));
+      if (sessionCookie) {
+        const sessionId = sessionCookie.split('=')[1];
+        await this.odooAuthService.setSessionId(sessionId);
+      }
+    }
+    return response.data as T;
+  }
+
   async getProductList(filters: any): Promise<ProductListResponse> {
     const body = {
       jsonrpc: "2.0",
@@ -39,15 +63,15 @@ export class EcommerceService {
 
     const options = {
       url: `${this.apiUrl}/api/shop`,
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      ...await this.getHttpOptions(),
       data: body,
     };
 
     try {
-      const response: HttpResponse = await CapacitorHttp.post(options);
-      const data: ProductListResponse = response.data;
+      const response: HttpResponse = await CapacitorHttp.request(options);
+      const data = await this.handleResponse<ProductListResponse>(response);
       if (data.result) {
-        // Enrich product data with calculated fields
         data.result.products = this.enrichProductData(data.result.products);
         return data;
       } else {
@@ -63,12 +87,12 @@ export class EcommerceService {
     const options = {
       url: `${this.apiUrl}/api/product/${productId}`,
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: { id: productId } // JSON body
+      ...await this.getHttpOptions(),
+      data: { id: productId }
     };
 
     const response: HttpResponse = await CapacitorHttp.request(options);
-    return response.data;
+    return this.handleResponse<any>(response);
   }
 
   async getCombinationInfo(productTemplateId: number, productId: number, combination: any, addQty: number) {
@@ -85,16 +109,17 @@ export class EcommerceService {
       },
       id: new Date().getTime()
     };
-  
+
     const options = {
       url: `${this.apiUrl}/api/product/combinations`,
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      ...await this.getHttpOptions(),
       data: body,
     };
-  
+
     try {
-      const response: HttpResponse = await CapacitorHttp.post(options);
-      const data: ApiResponse<any> = response.data;
+      const response: HttpResponse = await CapacitorHttp.request(options);
+      const data = await this.handleResponse<ApiResponse<any>>(response);
       if (data.result) {
         return data.result;
       } else {
@@ -105,7 +130,7 @@ export class EcommerceService {
       throw new Error('Failed to fetch combination info');
     }
   }
-  
+
   async getPublicCategories(): Promise<Category[]> {
     const body = {
       jsonrpc: "2.0",
@@ -113,16 +138,17 @@ export class EcommerceService {
       params: {},
       id: null
     };
-  
+
     const options = {
       url: `${this.apiUrl}/api/categories`,
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      ...await this.getHttpOptions(),
       data: body,
     };
-  
+
     try {
-      const response: HttpResponse = await CapacitorHttp.post(options);
-      const data: ApiResponse<Category[]> = response.data;
+      const response: HttpResponse = await CapacitorHttp.request(options);
+      const data = await this.handleResponse<ApiResponse<Category[]>>(response);
       if (data.result) {
         return data.result;
       } else {
@@ -135,14 +161,10 @@ export class EcommerceService {
   }
 
   async getHomeCategories(): Promise<HomeCategoriesResponse> {
-    const sessionId = await this.odooAuthService.getSessionId();
     const options = {
       url: `${this.apiUrl}/api/home_categories`,
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cookie': `session_id=${sessionId}`
-      },
+      ...await this.getHttpOptions(),
       data: {
         jsonrpc: "2.0",
         params: {}
@@ -151,18 +173,11 @@ export class EcommerceService {
 
     try {
       const response: HttpResponse = await CapacitorHttp.request(options);
-      return response.data as HomeCategoriesResponse;
+      return this.handleResponse<HomeCategoriesResponse>(response);
     } catch (error) {
       console.error('Error fetching home categories with products', error);
       throw error;
     }
-  }
-  
-  private async getHttpOptions() {
-    const sessionId = await this.odooAuthService.getSessionId();
-    return {
-      'Content-Type': 'application/json',
-    };
   }
 
   async addToCart(
@@ -195,13 +210,14 @@ export class EcommerceService {
 
     const options = {
       url: `${this.apiUrl}/api/cart/update_json`,
-      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      ...await this.getHttpOptions(),
       data: body,
     };
 
     try {
-      const response: HttpResponse = await CapacitorHttp.post(options);
-      const data: ApiResponse<any> = response.data;
+      const response: HttpResponse = await CapacitorHttp.request(options);
+      const data = await this.handleResponse<ApiResponse<any>>(response);
       if (data.result) {
         return data.result;
       } else {
@@ -212,5 +228,4 @@ export class EcommerceService {
       throw new Error('Failed to add to cart');
     }
   }
-
 }
