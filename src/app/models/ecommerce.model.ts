@@ -15,6 +15,18 @@ export interface Product {
   photos: Photo[];
   combinations: Combination[];
   discountPercentage?: number;
+  free_qty: number;  // New field
+  product_type: string;  // New field
+  available_threshold: number;  // New field
+  cart_qty: number;  // New field
+  uom_name: string;  // New field
+  uom_rounding: number;  // New field
+  allow_out_of_stock_order: boolean;  // New field
+  show_availability: boolean;  // New field
+  out_of_stock_message: boolean;  // New field
+  has_stock_notification: boolean;  // New field
+  stock_notification_email: string;  // New field
+  is_in_wishlist: boolean;  // New field
 }
 
 export interface Combination {
@@ -77,7 +89,7 @@ export interface Category {
   name: string;
   image_url: string;
   sequence: number;
-  parent_id?:any
+  parent_id?: any;
   start_date: string;
   end_date: string;
   banner_image_url: string;
@@ -101,4 +113,3 @@ export interface ApiResponse<T> {
   result: T;
   error?: any;
 }
-

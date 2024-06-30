@@ -37,7 +37,7 @@ export class ProductInfoPage implements OnInit {
   product: Product | null = null;
   selectedAttributes: { [key: number]: number } = {};  // Map attribute_id to value_id
   isCombinationValid: boolean = true;
-  quantity: number = 1
+  quantity: number = 1;  // Initialize quantity
 
   constructor(
     public util: UtilService,
@@ -161,7 +161,7 @@ export class ProductInfoPage implements OnInit {
           price_reduce: combinationResponse.price_extra,
           discount_percentage: combinationResponse.has_discounted_price ? ((combinationResponse.list_price - combinationResponse.price) / combinationResponse.list_price) * 100 : 0
         };
-        this.price= combinationResponse.price
+        this.price = combinationResponse.price;
         this.cover = this.util.getApiUrl() + combinationResponse.image_url;
         this.images = [this.cover, ...this.product!.photos.map(photo => this.util.getApiUrl() + photo.url)];
       }
@@ -169,6 +169,19 @@ export class ProductInfoPage implements OnInit {
       console.error('Error updating product info with combination', error);
     }
   }
+
+  increaseQuantity() {
+    if (this.product && this.quantity < this.product.free_qty) {
+      this.quantity += 1;
+    }
+  }
+
+  decreaseQuantity() {
+    if (this.quantity > 1) {
+      this.quantity -= 1;
+    }
+  }
+
   async addToCart() {
     const variantValues = this.getCombinationAttributes();
     const productCustomAttributeValues: any[] = [];  // Explicitly define the type

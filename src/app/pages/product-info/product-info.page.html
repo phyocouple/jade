@@ -64,15 +64,19 @@
   <ion-toolbar>
     <ion-row>
       <ion-col size="6">
-        <ion-button expand="block" fill="outline" color="medium" (click)="addToCart()">
-          <ion-icon slot="start" name="bag-handle-outline"></ion-icon>
-          Add to Cart
-        </ion-button>
+        <ion-item *ngIf="(product?.free_qty || 0) > 0">
+          <ion-button (click)="decreaseQuantity()" [disabled]="quantity <= 1">-</ion-button>
+          <ion-label>{{ quantity }}</ion-label>
+          <ion-button (click)="increaseQuantity()" [disabled]="quantity >= (product?.free_qty || 0)">+</ion-button>
+        </ion-item>
+        <ion-item *ngIf="(product?.free_qty || 0) === 0">
+          <ion-label color="danger">Out of Stock</ion-label>
+        </ion-item>
       </ion-col>
       <ion-col size="6">
-        <ion-button expand="block" fill="solid" color="primary" (click)="addToCart()">
+        <ion-button expand="block" fill="solid" color="primary" (click)="addToCart()" [disabled]="(product?.free_qty || 0) === 0">
           <ion-icon slot="start" name="cart-outline"></ion-icon>
-          Buy Now
+          Add to Cart
         </ion-button>
       </ion-col>
     </ion-row>
