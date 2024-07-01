@@ -161,6 +161,9 @@ export class ProductInfoPage implements OnInit {
           price_reduce: combinationResponse.price_extra,
           discount_percentage: combinationResponse.has_discounted_price ? ((combinationResponse.list_price - combinationResponse.price) / combinationResponse.list_price) * 100 : 0
         };
+        this.product!.free_qty = combinationResponse.free_qty
+        this.product!.cart_qty = combinationResponse.cart_qty
+        this.product!.id = combinationResponse.product_id
         this.price = combinationResponse.price;
         this.cover = this.util.getApiUrl() + combinationResponse.image_url;
         this.images = [this.cover, ...this.product!.photos.map(photo => this.util.getApiUrl() + photo.url)];
@@ -171,7 +174,7 @@ export class ProductInfoPage implements OnInit {
   }
 
   increaseQuantity() {
-    if (this.product && this.quantity < this.product.free_qty) {
+    if (this.product && this.quantity < (this.product.free_qty - this.product.cart_qty)) {
       this.quantity += 1;
     }
   }

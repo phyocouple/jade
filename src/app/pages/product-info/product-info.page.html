@@ -32,10 +32,10 @@
       <ion-col size="12">
         <div class="price-tag">
           <ion-label class="price">
-            <span class="active" *ngIf="discountPercentage <= 0">{{price | currency}}</span>
-            <span class="active" *ngIf="discountPercentage > 0">{{discount | currency}}</span>
+            <span class="active" *ngIf="discountPercentage <= 0">{{price}} {{ product?.currency }}</span>
+            <span class="active" *ngIf="discountPercentage > 0">{{discount}} {{ product?.currency }}</span>
             &nbsp;
-            <span class="deactive" *ngIf="discountPercentage > 0">{{price | currency}}</span>
+            <span class="deactive" *ngIf="discountPercentage > 0">{{price}} {{ product?.currency }}</span>
           </ion-label>
         </div>
         <ion-label class="title">
@@ -60,6 +60,7 @@
     <div class="spacer"></div>
   </div>
 </ion-content>
+
 <ion-footer>
   <ion-toolbar>
     <ion-row>
@@ -67,17 +68,20 @@
         <ion-item *ngIf="(product?.free_qty || 0) > 0">
           <ion-button (click)="decreaseQuantity()" [disabled]="quantity <= 1">-</ion-button>
           <ion-label>{{ quantity }}</ion-label>
-          <ion-button (click)="increaseQuantity()" [disabled]="quantity >= (product?.free_qty || 0)">+</ion-button>
+          <ion-button (click)="increaseQuantity()" [disabled]="quantity >= ((product?.free_qty ?? 0) - (product?.cart_qty ?? 0))">+</ion-button>
         </ion-item>
         <ion-item *ngIf="(product?.free_qty || 0) === 0">
           <ion-label color="danger">Out of Stock</ion-label>
         </ion-item>
       </ion-col>
       <ion-col size="6">
-        <ion-button expand="block" fill="solid" color="primary" (click)="addToCart()" [disabled]="(product?.free_qty || 0) === 0">
+        <ion-button expand="block" fill="solid" color="primary" 
+                    (click)="addToCart()" 
+                    [disabled]="(product?.free_qty || 0) === 0 || quantity > ((product?.free_qty ?? 0) - (product?.cart_qty ?? 0))">
           <ion-icon slot="start" name="cart-outline"></ion-icon>
           Add to Cart
         </ion-button>
+        <ion-label *ngIf="product?.cart_qty">In Cart: {{ product?.cart_qty }}</ion-label>
       </ion-col>
     </ion-row>
   </ion-toolbar>
