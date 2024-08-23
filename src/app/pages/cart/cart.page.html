@@ -1,10 +1,3 @@
-<!--
-  Authors : initappz (Rahul Jograna)
-  Website : https://initappz.com/
-  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
-  terms found in the Website https://initappz.com/license
-  Copyright and Good Faith Purchasers © 2023-present initappz.
--->
 <ion-header class="ion-no-border">
   <ion-toolbar mode="md" color="primary">
     <ion-title>Cart</ion-title>
@@ -17,55 +10,73 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="cart-screen">
-    <ion-card mode="ios" class="cart-item" *ngFor="let item of util.products.slice(0,8);let i = index;">
-      <div class="cart-header">
-        <ion-icon name="storefront-outline" color="secondary"></ion-icon>
-        <ion-label class="brand">{{item.brand}}</ion-label>
-      </div>
-      <div class="cart-content">
-        <ion-row>
-          <ion-col size="3">
-            <div class="cover-image" [ngStyle]="{'background-image': 'url('+item.thumbnail+')'}"></div>
-          </ion-col>
-          <ion-col size="6">
-            <div class="name-content">
-              <ion-label class="title">
-                {{ (item.title.length>20)? (item.title | slice:0:20)+'..':(item.title)}}
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="cart && cart.values.order_lines.length > 0; else emptyCart">
+    <div class="cart-screen">
+      <ion-card mode="ios" class="cart-item" *ngFor="let item of cartItems; let i = index;">
+        <div class="cart-header">
+          <ion-icon name="storefront-outline" color="secondary"></ion-icon>
+          <ion-label class="brand">{{item.product_name}}</ion-label>
+        </div>
+        <div class="cart-content">
+          <ion-row>
+            <ion-col size="3">
+              <div class="cover-image" [ngStyle]="{'background-image': 'url('+item.image_url+')'}"></div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="name-content">
+                <ion-label class="title">
+                  {{ (item.product_name.length>20)? (item.product_name | slice:0:20)+'..':(item.product_name)}}
+                </ion-label>
+                <div class="variations" (click)="openVariations(i)">
+                  <ion-label class="lbl">Variations : {{ item.combination.join(', ') || 'None' }}</ion-label>
+                  <ion-icon name="chevron-down-outline" color="light"></ion-icon>
+                </div>
+                <div class="quantity">
+                  <ion-icon name="remove-outline" color="medium"></ion-icon>
+                  <ion-label class="lbl"> {{item.product_qty}} </ion-label>
+                  <ion-icon name="add-outline" color="medium"></ion-icon>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size="3" style="position: relative;">
+              <ion-label class="price">
+                <span class="active"> {{item.price_unit}} {{item.currency}} </span>
               </ion-label>
-              <div class="variations" (click)="openVariations(i)">
-                <ion-label class="lbl">Variations : Yellow, L</ion-label>
-                <ion-icon name="chevron-down-outline" color="light"></ion-icon>
-              </div>
-              <div class="quantity">
-                <ion-icon name="remove-outline" color="medium"></ion-icon>
-                <ion-label class="lbl"> {{i+1}} </ion-label>
-                <ion-icon name="add-outline" color="medium"></ion-icon>
-              </div>
-            </div>
-          </ion-col>
-          <ion-col size="3" style="position: relative;">
-            <ion-label class="price">
-              <span class="active" *ngIf="item.discountPercentage <= 0"> {{item.price}} </span>
-              <span class="active"
-                *ngIf="item.discountPercentage > 0">₹{{getDiscountedPrice(item.price,item.discountPercentage)}}</span>
-              &nbsp;
-              <span class="deactive" *ngIf="item.discountPercentage > 0">₹{{item.price}}</span>
-            </ion-label>
-            <ion-icon name="trash-bin-outline" class="delte-btn" color="danger"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </div>
-    </ion-card>
+              <ion-icon name="trash-bin-outline" class="delte-btn" color="danger"></ion-icon>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-card>
+    </div>
   </div>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart">
+      <img src="assets/empty_cart.svg" alt="Empty Cart" class="empty-cart-image">
+      <ion-label class="empty-cart-message">Your cart is empty</ion-label>
+      <ion-button expand="block" fill="solid" color="primary" (click)="startShopping()">
+        Start Shopping
+      </ion-button>
+    </div>
+  </ng-template>
 </ion-content>
-<ion-footer>
+
+<ion-footer *ngIf="cart && cart.values.order_lines.length > 0">
   <ion-toolbar color="tertiary">
     <ion-row>
       <ion-col size="8">
         <div class="cart-price-lbl">
-          <ion-label class="lbl">Total (8 Products) : </ion-label>
-          <ion-label class="price">₹15,797.00</ion-label>
+          <ion-label class="lbl">Total ({{ cart.values.website_sale_order.cart_quantity }} Products) : </ion-label>
+          <ion-label class="price">{{ cart.values.amount }} {{ cart.values.currency }}</ion-label>
         </div>
       </ion-col>
       <ion-col size="4">

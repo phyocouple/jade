@@ -1,14 +1,9 @@
-/*
-  Authors : initappz (Rahul Jograna)
-  Website : https://initappz.com/
-  App Name : Ecommerce - 1 DilMart This App Template Source code is licensed as per the
-  terms found in the Website https://initappz.com/license
-  Copyright and Good Faith Purchasers © 2023-present initappz.
-*/
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { UtilService } from 'src/app/services/util.service';
 import { VariationsModalPage } from '../variations-modal/variations-modal.page';
+import { EcommerceService } from 'src/app/services/ecommerce.service';
+import { CartOrderLine, CartResponse } from 'src/app/models/cart.model';
 
 @Component({
   selector: 'app-cart',
@@ -16,13 +11,39 @@ import { VariationsModalPage } from '../variations-modal/variations-modal.page';
   styleUrls: ['./cart.page.scss'],
 })
 export class CartPage implements OnInit {
+  cart: CartResponse | null = null;
+  cartItems: CartOrderLine[] = [];
 
   constructor(
     public util: UtilService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private ecommerceService: EcommerceService
   ) { }
 
   ngOnInit() {
+    this.loadCart();
+  }
+
+  async loadCart() {
+    try {
+      const cartData: CartResponse = await this.ecommerceService.getCart();
+      this.cart = cartData;
+      if (this.cart && this.cart.values) {
+        this.cartItems = this.cart.values.order_lines;
+      }
+    } catch (error) {
+      console.error('Error loading cart', error);
+    }
+  }
+
+  async doRefresh(event: any) {
+    try {
+      await this.loadCart();
+    } catch (error) {
+      console.error('Error refreshing cart', error);
+    } finally {
+      event.target.complete();
+    }
   }
 
   getDiscountedPrice(price: any, discount: any) {
@@ -45,4 +66,7 @@ export class CartPage implements OnInit {
     this.util.navigateToPage('checkout');
   }
 
+  startShopping() {
+    this.util.navigateToPage('home');
+  }
 }

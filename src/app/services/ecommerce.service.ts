@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 import { Product, Category, ApiResponse, ProductListResponse, HomeCategoriesResponse } from '../models/ecommerce.model';
+import { CartResponse } from '../models/cart.model';
 import { OdooAuthService } from './odoo-auth.service';
 
 @Injectable({
@@ -33,7 +34,8 @@ export class EcommerceService {
     return {
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': sessionId ? `session_id=${sessionId}` : ''
+        'Cookie': sessionId ? `session_id=${sessionId}` : '',
+        'Authorization': 'session_id=a36ff8a6818008a9f2805e835ff360367519c5fb'
       },
       withCredentials: true,
     };
@@ -157,6 +159,30 @@ export class EcommerceService {
     } catch (error) {
       console.error('Error fetching categories', error);
       throw new Error('Failed to fetch categories');
+    }
+  }
+
+  async getCart(): Promise<CartResponse> {
+    const body = {
+      jsonrpc: "2.0",
+      method: "call",
+      params: {},
+      id: null
+    };
+
+    const options = {
+      url: `${this.apiUrl}/api/cart`,
+      method: 'POST',
+      ...await this.getHttpOptions(),
+      data: body,
+    };
+
+    try {
+      const response: HttpResponse = await CapacitorHttp.request(options);
+      return this.handleResponse<CartResponse>(response);
+    } catch (error) {
+      console.error('Error fetching cart', error);
+      throw new Error('Failed to fetch cart');
     }
   }
 
